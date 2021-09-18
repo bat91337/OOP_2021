@@ -26,8 +26,13 @@ namespace Isu.Services
             }
 
             var addgroup = new Group(name);
-            _listgroup.Add(addgroup);
-            return addgroup;
+            if (addgroup.CheckGroup(name))
+            {
+                _listgroup.Add(addgroup);
+                return addgroup;
+            }
+
+            throw new IsuException("error");
         }
 
         public Student AddStudent(Group group, string name)
