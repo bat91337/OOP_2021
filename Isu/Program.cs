@@ -1,8 +1,13 @@
-﻿namespace Isu
+﻿using System;
+using Isu.Models;
+using Isu.Properties;
+using Isu.Services;
+
+namespace Isu
 {
-    internal class Program
+    public class Program
     {
-        private static void Main()
+        public static void Main()
         {
         }
     }

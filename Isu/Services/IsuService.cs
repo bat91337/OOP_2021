@@ -11,28 +11,20 @@ namespace Isu.Services
     {
         private List<Group> _listgroup;
         private int _maxgroupsize;
+        private int _studentId;
 
         public IsuService(int maxgroupsize)
         {
             _listgroup = new List<Group>();
             _maxgroupsize = maxgroupsize;
+            _studentId = 0;
         }
 
         public Group AddGroup(string name)
         {
-            if (string.IsNullOrWhiteSpace(name))
-            {
-                throw new IsuException("error");
-            }
-
-            var addgroup = new Group(name);
-            if (addgroup.CheckGroup(name))
-            {
-                _listgroup.Add(addgroup);
-                return addgroup;
-            }
-
-            throw new IsuException("error");
+            var group = new Group(name);
+            _listgroup.Add(group);
+            return group;
         }
 
         public Student AddStudent(Group group, string name)
@@ -51,7 +43,7 @@ namespace Isu.Services
             {
                 if (roup.NameGroup.Equals(group.NameGroup))
                 {
-                    var student = new Student(name);
+                    var student = new Student(name, _studentId++);
                     roup.Students.Add(student);
                     return student;
                 }
