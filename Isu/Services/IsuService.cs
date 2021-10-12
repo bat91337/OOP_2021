@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Isu.Models;
 using Isu.Properties;
 using Isu.Services;
@@ -9,27 +10,27 @@ namespace Isu.Services
 {
     public class IsuService : IIsuService
     {
-        private List<Group> _listgroup;
-        private int _maxgroupsize;
+        private List<Group> _groupList;
+        private int _maxGroupSize;
         private int _studentId;
 
         public IsuService(int maxgroupsize)
         {
-            _listgroup = new List<Group>();
-            _maxgroupsize = maxgroupsize;
+            _groupList = new List<Group>();
+            _maxGroupSize = maxgroupsize;
             _studentId = 0;
         }
 
         public Group AddGroup(string name)
         {
             var group = new Group(name);
-            _listgroup.Add(group);
+            _groupList.Add(group);
             return group;
         }
 
         public Student AddStudent(Group group, string name)
         {
-            if (group.Students.Count >= _maxgroupsize)
+            if (group.Students.Count >= _maxGroupSize)
             {
                 throw new IsuException("error");
             }
@@ -39,12 +40,12 @@ namespace Isu.Services
                 throw new IsuException("error");
             }
 
-            foreach (var roup in _listgroup)
+            foreach (Group group1 in _groupList)
             {
-                if (roup.NameGroup.Equals(group.NameGroup))
+                if (group1.GroupName.Equals(group.GroupName))
                 {
                     var student = new Student(name, _studentId++);
-                    roup.Students.Add(student);
+                    group1.Students.Add(student);
                     return student;
                 }
             }
@@ -54,14 +55,12 @@ namespace Isu.Services
 
         public Student GetStudent(int id)
         {
-            foreach (var roup in _listgroup)
+            foreach (Group group in _groupList)
             {
-                foreach (var student in roup.Students)
+                Student student = group.Students.Find(student => student.Id == id);
+                if (student != null)
                 {
-                    if (student.Id == id)
-                    {
-                        return student;
-                    }
+                    return student;
                 }
             }
 
@@ -70,33 +69,25 @@ namespace Isu.Services
 
         public Student FindStudent(string name)
         {
-            foreach (var group in _listgroup)
+            foreach (Group group in _groupList)
             {
-                foreach (var student in group.Students)
+                Student student = group.Students.Find(student => student.StudentsName.Equals(name));
+                if (student != null)
                 {
-                    if (student.NameStudents.Equals(name))
-                    {
-                        return student;
-                    }
+                    return student;
                 }
             }
 
-            return null;
+            throw new IsuException("error");
         }
 
         public List<Student> FindStudents(string groupName)
         {
             List<Student> listStudent = new List<Student>();
 
-            foreach (var group in _listgroup)
+            foreach (var group in _groupList)
             {
-                foreach (var student in group.Students)
-                {
-                    if (student.NameStudents.Equals(groupName))
-                    {
-                        listStudent.Add(student);
-                    }
-                }
+                listStudent.AddRange(@group.Students.Where(student => student.StudentsName.Equals(groupName)));
             }
 
             return listStudent;
@@ -109,12 +100,9 @@ namespace Isu.Services
                 throw new IsuException("error");
             }
 
-            foreach (var groups in _listgroup)
+            foreach (Group groups in _groupList.Where(groups => groupName.Equals(groups.GroupName)))
             {
-                if (groupName.Equals(groups.NameGroup))
-                {
-                    return groups;
-                }
+                return groups;
             }
 
             throw new IsuException("error");
@@ -123,7 +111,7 @@ namespace Isu.Services
         public List<Student> FindStudents(CourseNumber courseNumber)
         {
             List<Student> listStudent = new List<Student>();
-            foreach (var group in FindGroups(courseNumber))
+            foreach (Group group in FindGroups(courseNumber))
             {
                 listStudent.AddRange(group.Students);
             }
@@ -133,21 +121,12 @@ namespace Isu.Services
 
         public List<Group> FindGroups(CourseNumber courseNumber)
         {
-            List<Group> listgroup = new List<Group>();
-            foreach (var groups in _listgroup)
-            {
-                if (groups.CourseNumber.Equals(courseNumber))
-                {
-                    listgroup.Add(groups);
-                }
-            }
-
-            return listgroup;
+            return _groupList.Where(groups => groups.CourseNumber.Equals(courseNumber)).ToList();
         }
 
         public void ChangeStudentGroup(Student student, Group newGroup)
         {
-            Group previousGroup = _listgroup.Find(group => group.Students.Contains(student));
+            Group previousGroup = _groupList.Find(group => group.Students.Contains(student));
             newGroup.Students.Add(student);
             previousGroup.Students.Remove(student);
         }

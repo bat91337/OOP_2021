@@ -7,16 +7,23 @@ namespace Isu.Models
 {
     public class Group
     {
+        private const int MinCourseNumber = 1;
+        private const int MaxCourseNumber = 4;
         public Group(string name)
         {
             CheckGroup(name);
-            NameGroup = name;
+            GroupName = name;
             int coursenumber = int.Parse(name.Substring(2, 1));
             CourseNumber = (CourseNumber)coursenumber;
             Students = new List<Student>();
+            bool group = CheckGroup(name);
+            if (group.Equals(false))
+            {
+                throw new IsuException("error");
+            }
         }
 
-        public string NameGroup { get; private set; }
+        public string GroupName { get; private set; }
         public List<Student> Students { get; }
 
         public CourseNumber CourseNumber { get; private set; }
@@ -25,33 +32,29 @@ namespace Isu.Models
         {
             if (name.Length != 5)
             {
-                throw new IsuException("error");
+                return false;
             }
 
             if (!name.Substring(0, 2).Equals("M3"))
-                throw new IsuException("wrong group name");
+                return false;
 
             int courseNumber;
 
             if (!int.TryParse(name.Substring(2, 1), out courseNumber))
             {
-                throw new IsuException("course number must be a number");
+                return false;
             }
 
-            if (courseNumber < 1 || courseNumber > 4)
-                throw new IsuException("wrong course number");
-
-            CourseNumber = (CourseNumber)courseNumber;
+            if (courseNumber < MinCourseNumber || courseNumber > MaxCourseNumber)
+                return false;
 
             if (!int.TryParse(name.Substring(3, 2), out int number))
             {
-                throw new IsuException("group number must be int");
+                return false;
             }
 
             if (number < 0)
-                throw new IsuException("group number must be a positive number");
-
-            NameGroup = name;
+                return false;
 
             return true;
         }

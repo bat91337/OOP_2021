@@ -5,12 +5,12 @@ namespace Isu.Properties
     {
         public Student(string name, int id)
         {
-            NameStudents = name;
+            StudentsName = name;
             Id = id;
         }
 
         public int Id { get; }
 
-        public string NameStudents { get; }
+        public string StudentsName { get; }
     }
 }
