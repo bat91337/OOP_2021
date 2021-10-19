@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using Isu.Properties;
 using Isu.Tools;
@@ -11,22 +10,21 @@ namespace Isu.Models
         private const int MaxCourseNumber = 4;
         public Group(string name)
         {
-            CheckGroup(name);
+            bool group = CheckGroup(name);
+            if (!group)
+            {
+                throw new IsuException("error");
+            }
+
             GroupName = name;
             int coursenumber = int.Parse(name.Substring(2, 1));
             CourseNumber = (CourseNumber)coursenumber;
             Students = new List<Student>();
-            bool group = CheckGroup(name);
-            if (group.Equals(false))
-            {
-                throw new IsuException("error");
-            }
         }
 
-        public string GroupName { get; private set; }
+        public string GroupName { get; }
         public List<Student> Students { get; }
-
-        public CourseNumber CourseNumber { get; private set; }
+        public CourseNumber CourseNumber { get; }
 
         private bool CheckGroup(string name)
         {
@@ -35,9 +33,18 @@ namespace Isu.Models
                 return false;
             }
 
-            if (!name.Substring(0, 2).Equals("M3"))
+            if (!char.IsLetter(name, 0))
+            {
                 return false;
+            }
 
+            if (!int.TryParse(name.Substring(1, 4), out int number))
+            {
+                return false;
+            }
+
+            if (number < 0)
+                return false;
             int courseNumber;
 
             if (!int.TryParse(name.Substring(2, 1), out courseNumber))
@@ -46,14 +53,6 @@ namespace Isu.Models
             }
 
             if (courseNumber < MinCourseNumber || courseNumber > MaxCourseNumber)
-                return false;
-
-            if (!int.TryParse(name.Substring(3, 2), out int number))
-            {
-                return false;
-            }
-
-            if (number < 0)
                 return false;
 
             return true;

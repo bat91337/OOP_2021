@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using Isu.Models;
@@ -14,11 +13,14 @@ namespace Isu.Services
         private int _maxGroupSize;
         private int _studentId;
 
+       // private List<Student> _students;
         public IsuService(int maxgroupsize)
         {
             _groupList = new List<Group>();
             _maxGroupSize = maxgroupsize;
             _studentId = 0;
+
+         // _students = new List<Student>();
         }
 
         public Group AddGroup(string name)
@@ -83,14 +85,7 @@ namespace Isu.Services
 
         public List<Student> FindStudents(string groupName)
         {
-            List<Student> listStudent = new List<Student>();
-
-            foreach (var group in _groupList)
-            {
-                listStudent.AddRange(@group.Students.Where(student => student.StudentsName.Equals(groupName)));
-            }
-
-            return listStudent;
+            return _groupList.Where(@group => groupName.Equals(@group)).SelectMany(@group => @group.Students).ToList();
         }
 
         public Group FindGroup(string groupName)
@@ -100,9 +95,10 @@ namespace Isu.Services
                 throw new IsuException("error");
             }
 
-            foreach (Group groups in _groupList.Where(groups => groupName.Equals(groups.GroupName)))
+            Group group = _groupList.Find(group => group.GroupName.Equals(groupName));
+            if (group != null)
             {
-                return groups;
+                return group;
             }
 
             throw new IsuException("error");
@@ -110,18 +106,12 @@ namespace Isu.Services
 
         public List<Student> FindStudents(CourseNumber courseNumber)
         {
-            List<Student> listStudent = new List<Student>();
-            foreach (Group group in FindGroups(courseNumber))
-            {
-                listStudent.AddRange(group.Students);
-            }
-
-            return listStudent;
+            return FindGroups(courseNumber).SelectMany(group => group.Students).ToList();
         }
 
         public List<Group> FindGroups(CourseNumber courseNumber)
         {
-            return _groupList.Where(groups => groups.CourseNumber.Equals(courseNumber)).ToList();
+            return _groupList.Where(group => group.CourseNumber.Equals(courseNumber)).ToList();
         }
 
         public void ChangeStudentGroup(Student student, Group newGroup)

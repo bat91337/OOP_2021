@@ -30,9 +30,10 @@ namespace Isu.Tests
         [Test]
         public void ReachMaxStudentPerGroup_ThrowException()
         {
+            Group group = _isuService.AddGroup("M3206");
+            
             Assert.Catch<IsuException>(() =>
             {
-                Group group = _isuService.AddGroup("M3206");
                 for (int i = 0; i < 100; i++)
                 {
                     _isuService.AddStudent(group, "Семен");
@@ -46,7 +47,7 @@ namespace Isu.Tests
         {
             Assert.Catch<IsuException>(() =>
             {
-                Group group20 = _isuService.AddGroup("T3302");
+                Group group20 = _isuService.AddGroup("33202");
             });
         }
 
@@ -56,7 +57,7 @@ namespace Isu.Tests
             Group group = _isuService.AddGroup("M3105");
             Student student = _isuService.AddStudent(group,"name");
             _isuService.ChangeStudentGroup(student , group);
-            Assert.True(_isuService.FindGroup("M3105").Students.All(studentTemp => studentTemp == student));
+            Assert.True(group.Students.All(studentTemp => studentTemp == student));
         }
     }
 }

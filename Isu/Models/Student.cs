@@ -1,4 +1,3 @@
-using System;
 namespace Isu.Properties
 {
     public class Student
