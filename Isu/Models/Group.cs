@@ -10,7 +10,6 @@ namespace Isu.Models
         private const int MaxCourseNumber = 4;
         public Group(string name)
         {
-            CheckGroup(name);
             if (!CheckGroup(name))
             {
                 throw new IsuException("error");
@@ -30,7 +29,7 @@ namespace Isu.Models
         {
             if (string.IsNullOrWhiteSpace(name))
             {
-                throw new IsuException("empty line");
+                return false;
             }
 
             if (name.Length != 5)

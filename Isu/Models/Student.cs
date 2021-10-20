@@ -5,11 +5,12 @@ namespace Isu.Properties
     {
         public Student(string name, int id)
         {
-            StudentsName = name;
             if (string.IsNullOrWhiteSpace(name))
             {
                 throw new IsuException("empty line");
             }
+
+            StudentsName = name;
 
             Id = id;
         }
