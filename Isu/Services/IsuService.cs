@@ -13,14 +13,11 @@ namespace Isu.Services
         private int _maxGroupSize;
         private int _studentId;
 
-       // private List<Student> _students;
         public IsuService(int maxgroupsize)
         {
             _groupList = new List<Group>();
             _maxGroupSize = maxgroupsize;
             _studentId = 0;
-
-         // _students = new List<Student>();
         }
 
         public Group AddGroup(string name)
@@ -92,7 +89,7 @@ namespace Isu.Services
         {
             if (string.IsNullOrWhiteSpace(groupName))
             {
-                throw new IsuException("error");
+                throw new IsuException("empty line");
             }
 
             Group group = _groupList.Find(group => group.GroupName.Equals(groupName));

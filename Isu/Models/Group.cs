@@ -10,8 +10,8 @@ namespace Isu.Models
         private const int MaxCourseNumber = 4;
         public Group(string name)
         {
-            bool group = CheckGroup(name);
-            if (!group)
+            CheckGroup(name);
+            if (!CheckGroup(name))
             {
                 throw new IsuException("error");
             }
@@ -28,6 +28,11 @@ namespace Isu.Models
 
         private bool CheckGroup(string name)
         {
+            if (string.IsNullOrWhiteSpace(name))
+            {
+                throw new IsuException("empty line");
+            }
+
             if (name.Length != 5)
             {
                 return false;
