@@ -27,7 +27,7 @@ namespace Shops.Tests
         {
             Shop shop = _shopManager.AddShop("magnit", "dawdawda");
             Product product = _shopManager.AddProduct(123, 60, "apple", shop);
-            _shopManager.ChangePrice(shop, product, 134);
+            shop.ChangePrice(product, 134);
         }
 
         [Test]

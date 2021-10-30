@@ -1,16 +1,17 @@
 using System.Collections.Generic;
+using System.Linq;
 using Shops.Tools;
 
 namespace Shops.Models
 {
     public class ShopManager
     {
-        private static int _shopId = 0;
-        private List<Shop> Listshops { get; set; } = new List<Shop>();
+        private static int _shopId;
+        private readonly List<Shop> _listShops = new List<Shop>();
         public Shop AddShop(string name, string address)
         {
             var shop = new Shop(name, address, ++_shopId);
-            Listshops.Add(shop);
+            _listShops.Add(shop);
             return shop;
         }
 
@@ -31,13 +32,13 @@ namespace Shops.Models
                 throw new ShopsException("error");
             }
 
-            foreach (var shop1 in Listshops)
+            foreach (Shop shop1 in _listShops)
             {
                 if (shop1.NameShop.Equals(shop.NameShop))
                 {
                     var product = new Product(name, price, amount, shop.NameShop);
                     shop1.Products.Add(product);
-                    amount += amount;
+                    product.Amount += amount;
                     return product;
                 }
             }
@@ -45,50 +46,25 @@ namespace Shops.Models
             return null;
         }
 
-        public void ChangePrice(Shop name, Product product, decimal newprice)
-        {
-            if (newprice == 0)
-            {
-                throw new ShopsException("error");
-            }
-
-            foreach (var shop in Listshops)
-            {
-                if (shop.NameShop.Equals(name.NameShop))
-                {
-                    foreach (var product1 in shop.Products)
-                    {
-                        if (product1.NameProduct.Equals(product.NameProduct))
-                        {
-                            product1.Price = newprice;
-                        }
-                    }
-                }
-            }
-        }
-
         public Shop ProductSearchMinimalPrice(string product, int amount)
         {
             decimal price1 = decimal.MaxValue;
             Shop shop1 = null;
-            foreach (var shop in Listshops)
+            foreach (Shop shop in _listShops)
             {
-                foreach (var product1 in shop.Products)
+                foreach (Product product1 in shop.Products.Where(product1 => product1.NameProduct.Equals(product)))
                 {
-                    if (product1.NameProduct.Equals(product))
+                    if (product1.Amount >= amount)
                     {
-                        if (product1.Amount >= amount)
+                        if (product1.Price < price1)
                         {
-                            if (product1.Price < price1)
-                            {
-                                 price1 = product1.Price;
-                                 shop1 = shop;
-                            }
+                            price1 = product1.Price;
+                            shop1 = shop;
                         }
-                        else
-                        {
-                            throw new ShopsException("not enough ");
-                        }
+                    }
+                    else
+                    {
+                        throw new ShopsException("not enough ");
                     }
                 }
             }
@@ -98,21 +74,8 @@ namespace Shops.Models
 
         public void Buy(string product, int amount, Person person)
         {
-            decimal sum;
             Shop shop = ProductSearchMinimalPrice(product, amount);
-            foreach (var product1 in shop.Products)
-            {
-                sum = amount * product1.Price;
-                if (sum <= person.Wallet)
-                {
-                    person.Wallet -= sum;
-                    product1.Amount -= amount;
-                }
-                else
-                {
-                    throw new ShopsException("not enough money");
-                }
-            }
+            shop.Buy(product, amount, person);
         }
     }
 }
