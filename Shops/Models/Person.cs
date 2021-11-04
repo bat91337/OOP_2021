@@ -1,14 +1,17 @@
+using System.Collections.Generic;
 namespace Shops.Models
 {
     public class Person
     {
-        public Person(string name, int money)
+        public Person(string personName, int money)
         {
-            NamePerson = name;
-            Wallet += money;
+            PersonName = personName;
+            PersonWallet += money;
+            PersonBasket = new Basket();
         }
 
-        public decimal Wallet { get; set; }
-        public string NamePerson { get; }
+        public decimal PersonWallet { get; set; }
+        public string PersonName { get; }
+        public Basket PersonBasket { get; }
     }
 }

@@ -6,46 +6,68 @@ namespace Shops.Models
 {
     public class Shop
     {
-        public Shop(string name, string address, int id)
+        public Shop()
         {
-            NameShop = name;
-            Address = address;
-            Id = id;
         }
 
-        public List<Product> Products { get; set; } = new List<Product>();
-        public string NameShop { get; }
-        public string Address { get; }
+        public Shop(string name, string shopAddress, int shopId)
+        {
+            if (string.IsNullOrWhiteSpace(name))
+            {
+                throw new ShopsException("empty line");
+            }
 
-        public int Id { get; }
+            NameShop = name;
+            if (string.IsNullOrWhiteSpace(shopAddress))
+            {
+                throw new ShopsException("empty line");
+            }
+
+            ShopAddress = shopAddress;
+            ShopId = shopId;
+        }
+
+        public List<Product> Products { get; } = new List<Product>();
+        public string NameShop { get; }
+        public string ShopAddress { get; }
+
+        public int ShopId { get; }
         public void ChangePrice(Product product, decimal newprice)
         {
             if (newprice == 0)
             {
-                throw new ShopsException("error");
+                throw new ShopsException("the price cannot be zero");
             }
 
-            foreach (Product product1 in Products.Where(product1 => product1.NameProduct.Equals(product.NameProduct)))
+            if (newprice < 0)
             {
-                product1.Price = newprice;
+                throw new ShopsException("the price cannot be less than zero");
+            }
+
+            foreach (Product product1 in Products.Where(product1 => product1.Products.ProductId.Equals(product.Products.ProductId)))
+            {
+                product1.ProductPrice = newprice;
             }
         }
 
-        public void Buy(string product, int amount, Person person)
+        public void Buy(string product, int id, int amount, Person person)
         {
             foreach (Product product1 in Products)
             {
-                if (product1.NameProduct.Equals(product))
+                if (product1.Products.ProductName.Equals(product))
                 {
-                    decimal sum = amount * product1.Price;
-                    if (sum <= person.Wallet)
+                    if (product1.Products.ProductId.Equals(id))
                     {
-                        person.Wallet -= sum;
-                        product1.Amount -= amount;
-                    }
-                    else
-                    {
-                        throw new ShopsException("not enough money");
+                        decimal sum = amount * product1.ProductPrice;
+                        if (sum <= person.PersonWallet)
+                        {
+                            person.PersonWallet -= sum;
+                            product1.ProductAmount -= amount;
+                        }
+                        else
+                        {
+                            throw new ShopsException("not enough money");
+                        }
                     }
                 }
             }

@@ -1,16 +1,27 @@
+using Shops.Tools;
 namespace Shops.Models
 {
     public class Product
     {
-        public Product(string name, decimal price, int amount, string shop)
+        public Product(AllProduct product, decimal price, int amount)
         {
-            NameProduct = name;
-            Amount = amount;
-            Price = price;
+            if (amount == 0)
+            {
+                throw new ShopsException("the amount cannot be zero");
+            }
+
+            ProductAmount = amount;
+            if (price == 0)
+            {
+                throw new ShopsException("the price cannot be zero");
+            }
+
+            ProductPrice = price;
+            Products = product;
         }
 
-        public decimal Price { get; set; }
-        public int Amount { get; set; }
-        public string NameProduct { get; }
+        public decimal ProductPrice { get; set; }
+        public int ProductAmount { get; set; }
+        public AllProduct Products { get; }
     }
-    }
+}
