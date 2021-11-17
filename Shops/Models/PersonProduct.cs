@@ -2,13 +2,13 @@ namespace Shops.Models
 {
     public class PersonProduct
     {
-        public PersonProduct(AllProduct product, int productAmount)
+        public PersonProduct(AllProducts products, int productAmount)
         {
             ProductAmount = productAmount;
-            Product = product;
+            Products = products;
         }
 
         public int ProductAmount { get; }
-        public AllProduct Product { get; }
+        public AllProducts Products { get; }
     }
 }

@@ -6,11 +6,8 @@ namespace Shops.Models
 {
     public class Shop
     {
-        public Shop()
-        {
-        }
-
-        public Shop(string name, string shopAddress, int shopId)
+        private static int _id;
+        public Shop(string name, string shopAddress)
         {
             if (string.IsNullOrWhiteSpace(name))
             {
@@ -24,7 +21,7 @@ namespace Shops.Models
             }
 
             ShopAddress = shopAddress;
-            ShopId = shopId;
+            ShopId = ++_id;
         }
 
         public List<Product> Products { get; } = new List<Product>();
@@ -44,24 +41,22 @@ namespace Shops.Models
                 throw new ShopsException("the price cannot be less than zero");
             }
 
-            foreach (Product product1 in Products.Where(product1 => product1.Products.ProductId.Equals(product.Products.ProductId)))
+            Product product1 = Products.First(product1 => product1.Productses.ProductId.Equals(product.Productses.ProductId));
             {
                 product1.ProductPrice = newprice;
             }
         }
 
-        public void Buy(string product, int id, int amount, Person person)
+        public void Buy(Product product, int amount, Person person)
         {
-            foreach (Product product1 in Products)
+            Product product1 = Products.First(product1 => product1.Productses.ProductId.Equals(product.Productses.ProductId));
             {
-                if (product1.Products.ProductName.Equals(product))
-                {
-                    if (product1.Products.ProductId.Equals(id))
+                    if (product1.ProductAmount >= amount)
                     {
                         decimal sum = amount * product1.ProductPrice;
                         if (sum <= person.PersonWallet)
                         {
-                            person.PersonWallet -= sum;
+                            person.BuyProduct(sum);
                             product1.ProductAmount -= amount;
                         }
                         else
@@ -69,7 +64,10 @@ namespace Shops.Models
                             throw new ShopsException("not enough money");
                         }
                     }
-                }
+                    else
+                    {
+                        throw new ShopsException("not enough amount");
+                    }
             }
         }
     }

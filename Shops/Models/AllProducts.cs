@@ -1,11 +1,12 @@
 using Shops.Tools;
 namespace Shops.Models
 {
-    public class AllProduct
+    public class AllProducts
     {
-        public AllProduct(string productName, int productId)
+        private static int _id;
+        public AllProducts(string productName)
         {
-            ProductId = productId;
+            ProductId = _id++;
             if (string.IsNullOrWhiteSpace(productName))
             {
                 throw new ShopsException("empty line");
