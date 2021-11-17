@@ -88,23 +88,23 @@ namespace Shops.Tests
     [Test]
     public void BuyProducts_ProductsBought()
     {
-        var vasya = new Person("vasya", 12000);
+        var vasya = new Person("vasya", 12);
         AllProducts allProduct = _shopManager.AddInAllProduct("apple");
         AllProducts allProduct1 = _shopManager.AddInAllProduct("pear");
         PersonProduct personProduct = _shopManager.AddProductInBasket(allProduct, 4, vasya);
         PersonProduct personProduct1 = _shopManager.AddProductInBasket(allProduct1, 2, vasya);
         List<PersonProduct> listPersonProduct = _shopManager.GiveListBasket(vasya);
         Shop shop = _shopManager.AddShop("magnit", "dawdawda");
-        Product product = _shopManager.AddProductInShop(130, 60, allProduct, shop);
-        Product product1 = _shopManager.AddProductInShop(144, 60, allProduct1, shop);
+        Product product = _shopManager.AddProductInShop(1, 60, allProduct, shop);
+        Product product1 = _shopManager.AddProductInShop(1, 60, allProduct1, shop);
         Shop shop1 = _shopManager.AddShop("pyaterochka", "dawdawda");
-        Product product11 = _shopManager.AddProductInShop(153, 60, allProduct, shop1);
-        Product product12 = _shopManager.AddProductInShop(103, 60, allProduct1, shop1);
+        Product product11 = _shopManager.AddProductInShop(2, 60, allProduct, shop1);
+        Product product12 = _shopManager.AddProductInShop(2, 60, allProduct1, shop1);
         Shop shop2 = _shopManager.AddShop("perekrestok", "dawdawda");
-        Product product2 = _shopManager.AddProductInShop(143, 60, allProduct, shop2);
-        Product product21 = _shopManager.AddProductInShop(163, 60, allProduct1, shop2);
+        Product product2 = _shopManager.AddProductInShop(3, 60, allProduct, shop2);
+        Product product21 = _shopManager.AddProductInShop(3, 60, allProduct1, shop2);
         _shopManager.BuyProducts(listPersonProduct, vasya);
-        Assert.AreEqual(vasya.PersonWallet, 9346);
+        Assert.AreEqual(vasya.PersonWallet, 6);
     }
      }
 }
