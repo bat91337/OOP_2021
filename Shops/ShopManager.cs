@@ -131,27 +131,21 @@ namespace Shops.Models
 
         public void BuyProducts(List<PersonProduct> basket, Person person)
         {
-            decimal sum = 0;
             Shop shop = FindMinimalPrices(basket);
             foreach (PersonProduct product in basket)
             {
-                foreach (Product product1 in _listShops.Where(shop1 => shop.ShopId.Equals(shop1.ShopId)).SelectMany(shop1 => shop1.Products))
+                decimal sum = 0;
+                Product product1 = shop.Products.FirstOrDefault(product1 => product.Products.ProductId.Equals(product1.Productses.ProductId));
+                decimal sumForOneProduct = product.ProductAmount * product1.ProductPrice;
+                sum += sumForOneProduct;
+                if (sum <= person.PersonWallet)
                 {
-                    if (product.Products.ProductId.Equals(product1.Productses.ProductId))
-                    {
-                        decimal sumForOneProduct = product.ProductAmount * product1.ProductPrice;
-                        sum += sumForOneProduct;
-                    }
-
-                    if (sum <= person.PersonWallet)
-                    {
-                        person.BuyProduct(sum);
-                        product1.ProductAmount -= product.ProductAmount;
-                    }
-                    else
-                    {
-                        throw new ShopsException("not enough money");
-                    }
+                    person.BuyProduct(sum);
+                    product1.ProductAmount -= product.ProductAmount;
+                }
+                else
+                {
+                    throw new ShopsException("not enough money");
                 }
             }
         }
