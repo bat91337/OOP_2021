@@ -41,10 +41,8 @@ namespace Shops.Models
                 throw new ShopsException("the price cannot be less than zero");
             }
 
-            Product product1 = Products.First(product1 => product1.Productses.ProductId.Equals(product.Productses.ProductId));
-            {
-                product1.ProductPrice = newprice;
-            }
+            Product product1 = Products.FirstOrDefault(product1 => product1.Productses.ProductId.Equals(product.Productses.ProductId));
+            product1.ProductPrice = newprice;
         }
 
         public void Buy(Product product, int amount, Person person)
