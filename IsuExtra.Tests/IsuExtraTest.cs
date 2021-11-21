@@ -16,51 +16,55 @@ namespace IsuExtra.Tests
 
         }
 
+
         [Test]
         public void AddNewOgnp_NewOgnpHasBeenAdd()
         {
-            Faculty faculty = _isuExtraService.AddFaculty("ФиТИП", "ОГНП", 'M');
-           Discipline discipline = _isuExtraService.AddDiscipline("discipline", faculty);
-           Assert.Contains(discipline, faculty.Disciplines);
+            Faculty faculty = _isuExtraService.AddFaculty("ФиТИП", 'M');
+            Ognp ognp = _isuExtraService.AddOgnpInFaculty("КиберБез", faculty);
+            Discipline discipline = _isuExtraService.AddDiscipline("discipline", faculty, ognp);
+            Assert.Contains(discipline, ognp.Disciplines);
 
         }
-
+        
         [Test]
         public void RecordingStudentInOGNP_StudentRecordedInOGNP()
         {
             Group group = _isuExtraService.AddGroup("V3208");
             Student student = _isuExtraService.AddStudent("Дорошенко Семен", group);
-            Faculty faculty = _isuExtraService.AddFaculty("ФиТИП", "ОГНП", 'M');
+            Faculty faculty = _isuExtraService.AddFaculty("ФиТИП", 'M');
+            Ognp ognp = _isuExtraService.AddOgnpInFaculty("КиберБез", faculty);
             ScheduleGroup scheduleGroup = _isuExtraService.AddScheduleGroup(group);
             Day day = _isuExtraService.AddDayInScheduleGroup(DayOfWeek.Friday, scheduleGroup);
             ScheduleFaculty scheduleFaculty = _isuExtraService.AddScheduleFaculty(faculty);
             Day dayFaculty = _isuExtraService.AddDayInScheduleFaculty(DayOfWeek.Friday, scheduleFaculty);
             _isuExtraService.AddScheduleFaculty(faculty);
             _isuExtraService.AddScheduleGroup(group);
-            _isuExtraService.AddGroupPairInSchedule(group,"maths", "123", DayOfWeek.Friday,1);
-            _isuExtraService.AddDisciplinePair(faculty, "кибербез", "234",2,DayOfWeek.Friday);
-            _isuExtraService.RecordingStudentInOgnp(faculty, student);
-            Assert.Contains(student, faculty.Students);
+            _isuExtraService.AddGroupPairInSchedule(group,"maths", "123", DayOfWeek.Friday,1,"M3208","daw");
+            _isuExtraService.AddDisciplinePair(faculty, "кибербез", "234",2,DayOfWeek.Friday, "M3208","daw");
+            _isuExtraService.RecordingStudentInOgnp(faculty, student, ognp);
+            Assert.Contains(student, ognp.Students);
         }
-
+        
         [Test]
         public void StudentRemoveFromOgnp_StudentRemovedFromOgnp()
         {
             Group group = _isuExtraService.AddGroup("V3208");
             Student student = _isuExtraService.AddStudent("Дорошенко Семен", group);
-            Faculty faculty = _isuExtraService.AddFaculty("ФиТИП", "ОГНП", 'M');
+            Faculty faculty = _isuExtraService.AddFaculty("ФиТИП", 'M');
+            Ognp ognp = _isuExtraService.AddOgnpInFaculty("КиберБез", faculty);
             ScheduleGroup scheduleGroup = _isuExtraService.AddScheduleGroup(group);
             Day day = _isuExtraService.AddDayInScheduleGroup(DayOfWeek.Friday, scheduleGroup);
             ScheduleFaculty scheduleFaculty = _isuExtraService.AddScheduleFaculty(faculty);
             Day dayFaculty = _isuExtraService.AddDayInScheduleFaculty(DayOfWeek.Friday, scheduleFaculty);
             _isuExtraService.AddScheduleFaculty(faculty);
             _isuExtraService.AddScheduleGroup(group);
-            _isuExtraService.AddGroupPairInSchedule(group,"maths", "123", DayOfWeek.Friday,1);
-            _isuExtraService.AddDisciplinePair(faculty, "кибербез", "234",2,DayOfWeek.Friday);
-            _isuExtraService.RemoveStudentFromOgnp(faculty, student);
+            _isuExtraService.AddGroupPairInSchedule(group,"maths", "123", DayOfWeek.Friday,1, "M3208","daw");
+            _isuExtraService.AddDisciplinePair(faculty, "кибербез", "234",2,DayOfWeek.Friday, "M3208","daw");
+            _isuExtraService.RemoveStudentFromOgnp(faculty, student, ognp);
             Assert.Catch<Exception>(() =>
             {
-                Assert.Contains(student, faculty.Students);
+                Assert.Contains(student, ognp.Students);
             });
         }
     }

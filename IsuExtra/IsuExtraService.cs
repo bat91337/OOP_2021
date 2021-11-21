@@ -22,7 +22,19 @@ namespace IsuExtra
             _scheduleFaculties = new List<ScheduleFaculty>();
         }
 
-        public void AddGroupPairInSchedule(Group group, string pairName, string classRoom, DayOfWeek pairDay, int pairNumber)
+        public Ognp AddOgnpInFaculty(string nameOgnp, Faculty faculty)
+        {
+            if (_faculties.Any(faculty1 => faculty1.NameFaculty.Equals(faculty.NameFaculty)))
+            {
+                Ognp ognp = new Ognp(nameOgnp);
+                faculty.Ognp.Add(ognp);
+                return ognp;
+            }
+
+            return new Ognp(nameOgnp);
+        }
+
+        public void AddGroupPairInSchedule(Group group, string pairName, string classRoom, DayOfWeek pairDay, int pairNumber, string groupName, string teacherName)
         {
             foreach (ScheduleGroup scheduleGroup in _scheduleGroups)
             {
@@ -32,8 +44,8 @@ namespace IsuExtra
                     {
                         if (pairDay.Equals(day.DayOfWeek))
                         {
-                                    var pair = new Pair(pairNumber, pairName, classRoom);
-                                    day.Pairs.Add(pair);
+                            var pair = new Pair(pairNumber, pairName, classRoom, groupName, teacherName);
+                            day.Pairs.Add(pair);
                         }
                     }
                 }
@@ -47,46 +59,31 @@ namespace IsuExtra
             return schedule;
         }
 
-        public Faculty AddFaculty(string nameFaculty, string nameOgnp, char firstLetter)
+        public Faculty AddFaculty(string nameFaculty, char firstLetter)
         {
-            var faculty = new Faculty(nameFaculty, nameOgnp, firstLetter);
+            var faculty = new Faculty(nameFaculty, firstLetter);
             _faculties.Add(faculty);
             return faculty;
         }
 
-        public Discipline AddDiscipline(string nameDiscipline, Faculty nameFaculty)
+        public Discipline AddDiscipline(string nameDiscipline, Faculty nameFaculty, Ognp ognp)
         {
-            foreach (Faculty faculty in _faculties)
+            if (_faculties.Any(faculty => faculty.NameFaculty.Equals(nameFaculty.NameFaculty)))
             {
-                if (faculty.NameFaculty.Equals(nameFaculty.NameFaculty))
-                {
-                    {
-                        var discipline = new Discipline(nameDiscipline);
-                        faculty.Disciplines.Add(discipline);
-                        return discipline;
-                    }
-                }
+                var discipline = new Discipline(nameDiscipline);
+                ognp.Disciplines.Add(discipline);
+                return discipline;
             }
 
             return null;
         }
 
-        public void AddDisciplinePair(Faculty nameFaculty, string nameDiscipline, string classRoom, int pairNumber, DayOfWeek pairDays)
+        public void AddDisciplinePair(Faculty nameFaculty, string nameDiscipline, string classRoom, int pairNumber, DayOfWeek pairDay, string groupName, string teacherName)
         {
-            foreach (ScheduleFaculty scheduleFaculty in _scheduleFaculties)
-            {
-                if (scheduleFaculty.Faculty.NameFaculty.Equals(nameFaculty.NameFaculty))
-                {
-                    foreach (Day day in scheduleFaculty.Schedule.Days)
-                    {
-                        if (pairDays.Equals(day.DayOfWeek))
-                        {
-                            var pair = new Pair(pairNumber, nameDiscipline, classRoom);
-                            day.Pairs.Add(pair);
-                        }
-                    }
-                }
-            }
+            ScheduleFaculty scheduleFaculty = _scheduleFaculties.FirstOrDefault(scheduleFaculty => scheduleFaculty.Faculty.NameFaculty.Equals(nameFaculty.NameFaculty));
+            Day day = scheduleFaculty.Schedule.Days.FirstOrDefault(day => day.DayOfWeek.Equals(pairDay));
+            var pair = new Pair(pairNumber, nameDiscipline, classRoom, groupName, teacherName);
+            day.Pairs.Add(pair);
         }
 
         public Day AddDayInScheduleGroup(DayOfWeek dayofweek, ScheduleGroup group)
@@ -126,7 +123,7 @@ namespace IsuExtra
             return null;
         }
 
-        public void RecordingStudentInOgnp(Faculty nameFaculty, Student student)
+        public void RecordingStudentInOgnp(Faculty nameFaculty, Student student, Ognp ognp)
         {
             string groupName = GetGroupName(student);
             char firstLetter = char.Parse(groupName.Substring(0, 1));
@@ -136,7 +133,8 @@ namespace IsuExtra
                 {
                     if (!faculty.FirstLetter.Equals(firstLetter))
                     {
-                        faculty.Students.Add(student);
+                        Ognp ognp1 = faculty.Ognp.FirstOrDefault(ognp1 => ognp1.NameOgnp.Equals(ognp.NameOgnp));
+                        ognp1.Students.Add(student);
                     }
                     else
                     {
@@ -150,46 +148,35 @@ namespace IsuExtra
             }
         }
 
-        public void RemoveStudentFromOgnp(Faculty nameFaculty, Student student)
+        public void RemoveStudentFromOgnp(Faculty nameFaculty, Student student, Ognp ognp)
         {
-            foreach (Faculty faculty in _faculties)
+            Faculty faculty = _faculties.FirstOrDefault(faculty => faculty.NameFaculty.Equals(nameFaculty.NameFaculty));
+            Ognp ognp1 = faculty.Ognp.FirstOrDefault(ognp1 => ognp1.NameOgnp.Equals(ognp.NameOgnp));
+            foreach (Student students in ognp1.Students.Where(students => students.StudentsName.Equals(student.StudentsName)))
             {
-                if (faculty.Equals(nameFaculty))
-                {
-                    foreach (Student students in faculty.Students.Where(students => students.StudentsName.Equals(student.StudentsName)))
-                    {
-                        faculty.Students.Remove(student);
-                    }
-                }
+                ognp1.Students.Remove(student);
             }
         }
 
-        public List<Faculty> FindStudentsInOgnp()
+        public List<Ognp> FindGroupOgnp(Ognp ognp)
         {
-            var listFaculties = new List<Faculty>();
+            var listFaculties = new List<Ognp>();
             foreach (Faculty faculty in _faculties)
             {
-                foreach (Student students in faculty.Students)
-                {
-                    faculty.Students.Add(students);
-                }
+                Ognp ognp1 = faculty.Ognp.FirstOrDefault(ognp1 => ognp1.NameOgnp.Equals(ognp.NameOgnp));
+                listFaculties.Add(ognp1);
             }
 
             return listFaculties;
         }
 
-        public List<Student> FindStudentsInOgnp(Faculty faculty)
+        public List<Student> FindStudentsInOgnp(Faculty faculty, Ognp ognp)
         {
             var listStudent = new List<Student>();
-            foreach (Faculty faculties in _faculties)
+            Ognp ognp1 = faculty.Ognp.FirstOrDefault(ognp1 => ognp1.NameOgnp.Equals(ognp.NameOgnp));
+            foreach (Student students in ognp1.Students)
             {
-                if (faculties.Equals(faculty))
-                {
-                    foreach (Student students in faculties.Students)
-                    {
-                        faculties.Students.Add(students);
-                    }
-                }
+                listStudent.Add(students);
             }
 
             return listStudent;
@@ -199,7 +186,7 @@ namespace IsuExtra
         {
             foreach (Group group in _isuService.GetListGroup())
             {
-                foreach (IEnumerable<Student> result in _faculties.Select(faculty => @group.Students.Except(faculty.Students)))
+                foreach (IEnumerable<Student> result in _faculties.SelectMany(faculty => faculty.Ognp.Select(ognp => @group.Students.Except(ognp.Students))))
                 {
                     return result;
                 }
@@ -210,30 +197,22 @@ namespace IsuExtra
 
         public Group AddGroup(string nameGroup)
         {
-            Group group = _isuService.AddGroup(nameGroup);
-            return group;
+            return _isuService.AddGroup(nameGroup);
         }
 
         public Student AddStudent(string studentName, Group group)
         {
-            Student student = _isuService.AddStudent(@group, studentName);
-
-            return student;
+            return _isuService.AddStudent(@group, studentName);
         }
 
         private bool CheckSchedule(string groupName, Faculty nameFaculty)
         {
-            foreach (ScheduleGroup scheduleGroup in _scheduleGroups)
+            ScheduleGroup scheduleGroup = _scheduleGroups.FirstOrDefault(scheduleGroup => scheduleGroup.Group.GroupName.Equals(groupName));
+            foreach (ScheduleFaculty scheduleFaculty in _scheduleFaculties.Where(scheduleFaculty => scheduleFaculty.Faculty.NameFaculty.Equals(nameFaculty.NameFaculty)))
             {
-                if (scheduleGroup.Group.GroupName.Equals(groupName))
+                if (scheduleFaculty.Schedule.CheckShceduleDay(scheduleGroup))
                 {
-                    foreach (ScheduleFaculty scheduleFaculty in _scheduleFaculties.Where(scheduleFaculty => scheduleFaculty.Faculty.NameFaculty.Equals(nameFaculty.NameFaculty)))
-                    {
-                        if (scheduleFaculty.Schedule.CheckShceduleDays(scheduleGroup))
-                        {
-                            return true;
-                        }
-                    }
+                    return true;
                 }
             }
 
@@ -242,12 +221,9 @@ namespace IsuExtra
 
         private string GetGroupName(Student student)
         {
-            foreach (Group group in _isuService.GetListGroup())
+            foreach (Group group in _isuService.GetListGroup().Where(group => group.Students.Any(students => students.Id.Equals(student.Id))))
             {
-                if (@group.Students.Any(students => students.Id.Equals(student.Id)))
-                {
-                    return @group.GroupName;
-                }
+                return group.GroupName;
             }
 
             return null;

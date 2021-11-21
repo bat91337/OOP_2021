@@ -12,7 +12,7 @@ namespace IsuExtra
 
         public List<Day> Days { get; }
 
-        public bool CheckShceduleDays(ScheduleGroup scheduleGroup)
+        public bool CheckShceduleDay(ScheduleGroup scheduleGroup)
         {
             foreach (Day day in scheduleGroup.Schedule.Days)
             {

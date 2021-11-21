@@ -5,19 +5,15 @@ namespace IsuExtra
 {
     public class Faculty
     {
-        public Faculty(string nameFaculty, string nameOgnp, char firstLetter)
+        public Faculty(string nameFaculty, char firstLetter)
         {
-            NameOgnp = nameOgnp;
             NameFaculty = nameFaculty;
-            Students = new List<Student>();
-            Disciplines = new List<Discipline>();
             FirstLetter = firstLetter;
+            Ognp = new List<Ognp>();
         }
 
-        public string NameOgnp { get; }
         public string NameFaculty { get; }
-        public List<Student> Students { get; }
-        public List<Discipline> Disciplines { get; }
+        public List<Ognp> Ognp { get; }
         public char FirstLetter { get; }
     }
 }
