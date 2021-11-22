@@ -17,11 +17,11 @@ namespace Shops.Models
             }
 
             ProductPrice = price;
-            Productses = products;
+            Products = products;
         }
 
         public decimal ProductPrice { get; set; }
         public int ProductAmount { get; set; }
-        public AllProducts Productses { get; }
+        public AllProducts Products { get; }
     }
 }

@@ -1,40 +1,40 @@
 using System.Collections.Generic;
 using System.Linq;
+using Shops.Repositories;
 using Shops.Tools;
 
 namespace Shops.Models
 {
     public class ShopManager
     {
-        private readonly List<Shop> _listShops;
-        private List<AllProducts> _listproduct;
-
-        public ShopManager()
+        private readonly ListAllProductRepository _listproducts;
+        private readonly ListShopRepository _listShops;
+        public ShopManager(ListAllProductRepository listproduct, ListShopRepository listShops)
         {
-            _listShops = new List<Shop>();
-            _listproduct = new List<AllProducts>();
+            _listproducts = listproduct;
+            _listShops = listShops;
         }
 
         public AllProducts AddInAllProduct(string name)
         {
             var product = new AllProducts(name);
-            _listproduct.Add(product);
+            _listproducts.AddAllProduct(product);
             return product;
         }
 
         public Shop AddShop(string name, string address)
         {
             var shop = new Shop(name, address);
-            _listShops.Add(shop);
+            _listShops.AddShops(shop);
             return shop;
         }
 
         public Product AddProductInShop(decimal price, int amount, AllProducts product1, Shop shop)
         {
-            Shop shop1 = _listShops.First(shop1 => shop1.ShopId.Equals(shop.ShopId));
+            Shop shop1 = _listShops.GetListShop().First(shop1 => shop1.ShopId.Equals(shop.ShopId));
             {
                 var product = new Product(product1, price, amount);
-                shop1.Products.Add(product);
+                shop1.Product.Add(product);
                 product.ProductAmount += amount;
                 return product;
             }
@@ -44,9 +44,9 @@ namespace Shops.Models
         {
             decimal price1 = decimal.MaxValue;
             Shop shop1 = null;
-            foreach (Shop shop in _listShops)
+            foreach (Shop shop in _listShops.GetListShop())
             {
-                foreach (Product product1 in shop.Products.Where(product1 => product1.Productses.ProductId.Equals(product.Productses.ProductId)))
+                foreach (Product product1 in shop.Product.Where(product1 => product1.Products.ProductId.Equals(product.Products.ProductId)))
                 {
                     if (product1.ProductAmount >= amount)
                     {
@@ -89,11 +89,11 @@ namespace Shops.Models
             decimal sum = 0;
             foreach (PersonProduct product in basket)
             {
-                foreach (Shop shop1 in _listShops)
+                foreach (Shop shop1 in _listShops.GetListShop())
                 {
                     if (shop1.ShopId.Equals(shop.ShopId))
                     {
-                        foreach (Product product1 in shop1.Products.Where(product1 => product1.Productses.ProductId.Equals(product.Products.ProductId)))
+                        foreach (Product product1 in shop1.Product.Where(product1 => product1.Products.ProductId.Equals(product.Products.ProductId)))
                         {
                             if (product1.ProductAmount > product.ProductAmount)
                             {
@@ -112,7 +112,7 @@ namespace Shops.Models
         {
             var dictionaryMinimalPrice = new Dictionary<Shop, decimal>();
             decimal minPrice = 0;
-            foreach (Shop shop in _listShops)
+            foreach (Shop shop in _listShops.GetListShop())
             {
                 decimal sum = CountSumForProducts(shop, basket);
                 dictionaryMinimalPrice.Add(shop, sum);
@@ -135,7 +135,7 @@ namespace Shops.Models
             foreach (PersonProduct product in basket)
             {
                 decimal sum = 0;
-                Product product1 = shop.Products.FirstOrDefault(product1 => product.Products.ProductId.Equals(product1.Productses.ProductId));
+                Product product1 = shop.Product.FirstOrDefault(product1 => product.Products.ProductId.Equals(product1.Products.ProductId));
                 decimal sumForOneProduct = product.ProductAmount * product1.ProductPrice;
                 sum += sumForOneProduct;
                 if (sum <= person.PersonWallet)

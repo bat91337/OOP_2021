@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using Shops.Repositories;
 using Shops.Tools;
 
 namespace Shops.Models
@@ -24,7 +25,7 @@ namespace Shops.Models
             ShopId = ++_id;
         }
 
-        public List<Product> Products { get; } = new List<Product>();
+        public List<Product> Product { get; } = new List<Product>();
         public string NameShop { get; }
         public string ShopAddress { get; }
 
@@ -41,13 +42,13 @@ namespace Shops.Models
                 throw new ShopsException("the price cannot be less than zero");
             }
 
-            Product product1 = Products.FirstOrDefault(product1 => product1.Productses.ProductId.Equals(product.Productses.ProductId));
+            Product product1 = Product.FirstOrDefault(product1 => product1.Products.ProductId.Equals(product.Products.ProductId));
             product1.ProductPrice = newprice;
         }
 
         public void Buy(Product product, int amount, Person person)
         {
-            Product product1 = Products.First(product1 => product1.Productses.ProductId.Equals(product.Productses.ProductId));
+            Product product1 = Product.First(product1 => product1.Products.ProductId.Equals(product.Products.ProductId));
             {
                     if (product1.ProductAmount >= amount)
                     {
