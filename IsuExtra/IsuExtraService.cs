@@ -36,20 +36,16 @@ namespace IsuExtra
 
         public void AddGroupPairInSchedule(Group group, string pairName, string classRoom, DayOfWeek pairDay, int pairNumber, string groupName, string teacherName)
         {
-            foreach (ScheduleGroup scheduleGroup in _scheduleGroups)
+            ScheduleGroup scheduleGroup =
+                _scheduleGroups.FirstOrDefault(scheduleGroup => scheduleGroup.Group.GroupName.Equals(group.GroupName));
+            Day day = scheduleGroup.Schedule.Days.FirstOrDefault(day => day.DayOfWeek.Equals(pairDay));
+            if (day.Pairs.Any(pair1 => pair1.PairNumber.Equals(pairNumber)))
             {
-                if (group.GroupName.Equals(scheduleGroup.Group.GroupName))
-                {
-                    foreach (Day day in scheduleGroup.Schedule.Days)
-                    {
-                        if (pairDay.Equals(day.DayOfWeek))
-                        {
-                            var pair = new Pair(pairNumber, pairName, classRoom, groupName, teacherName);
-                            day.Pairs.Add(pair);
-                        }
-                    }
-                }
+                throw new IsuExtraException("its pairNumber busy");
             }
+
+            var pair = new Pair(pairNumber, pairName, classRoom, groupName, teacherName);
+            day.Pairs.Add(pair);
         }
 
         public ScheduleGroup AddScheduleGroup(Group nameGroup)
@@ -110,17 +106,15 @@ namespace IsuExtra
 
         public Day AddDayInScheduleFaculty(DayOfWeek dayOfWeek, ScheduleFaculty schedulefacultu)
         {
-            foreach (ScheduleFaculty scheduleFaculty in _scheduleFaculties)
+            ScheduleFaculty scheduleFaculty = _scheduleFaculties.FirstOrDefault(scheduleFaculty =>
+                scheduleFaculty.Faculty.NameFaculty.Equals(schedulefacultu.Faculty.NameFaculty));
+            var day = new Day(dayOfWeek);
+            if (scheduleFaculty != null)
             {
-                if (scheduleFaculty.Faculty.NameFaculty.Equals(schedulefacultu.Faculty.NameFaculty))
-                {
-                    var day = new Day(dayOfWeek);
-                    scheduleFaculty.Schedule.Days.Add(day);
-                    return day;
-                }
+                scheduleFaculty.Schedule.Days.Add(day);
             }
 
-            return null;
+            return day;
         }
 
         public void RecordingStudentInOgnp(Faculty nameFaculty, Student student, Ognp ognp)
@@ -129,17 +123,15 @@ namespace IsuExtra
             char firstLetter = char.Parse(groupName.Substring(0, 1));
             if (!CheckSchedule(groupName, nameFaculty))
             {
-                foreach (Faculty faculty in _faculties.Where(faculty => faculty.NameFaculty.Equals(nameFaculty.NameFaculty)))
+                Faculty faculty = SearchFaculty(nameFaculty);
+                if (!faculty.FirstLetter.Equals(firstLetter))
                 {
-                    if (!faculty.FirstLetter.Equals(firstLetter))
-                    {
-                        Ognp ognp1 = faculty.Ognp.FirstOrDefault(ognp1 => ognp1.NameOgnp.Equals(ognp.NameOgnp));
-                        ognp1.Students.Add(student);
-                    }
-                    else
-                    {
-                        throw new IsuExtraException("you cannot enroll in the OGNP of your faculty");
-                    }
+                    Ognp ognp1 = faculty.Ognp.FirstOrDefault(ognp1 => ognp1.NameOgnp.Equals(ognp.NameOgnp));
+                    ognp1.Students.Add(student);
+                }
+                else
+                {
+                    throw new IsuExtraException("you cannot enroll in the OGNP of your faculty");
                 }
             }
             else
@@ -148,14 +140,18 @@ namespace IsuExtra
             }
         }
 
+        public Faculty SearchFaculty(Faculty namefaculty)
+        {
+            Faculty faculty = _faculties.FirstOrDefault(faculty => faculty.NameFaculty.Equals(namefaculty.NameFaculty));
+            return faculty;
+        }
+
         public void RemoveStudentFromOgnp(Faculty nameFaculty, Student student, Ognp ognp)
         {
             Faculty faculty = _faculties.FirstOrDefault(faculty => faculty.NameFaculty.Equals(nameFaculty.NameFaculty));
             Ognp ognp1 = faculty.Ognp.FirstOrDefault(ognp1 => ognp1.NameOgnp.Equals(ognp.NameOgnp));
-            foreach (Student students in ognp1.Students.Where(students => students.StudentsName.Equals(student.StudentsName)))
-            {
-                ognp1.Students.Remove(student);
-            }
+            Student students = ognp1.Students.FirstOrDefault(students => students.Id.Equals(student.Id));
+            ognp1.Students.Remove(student);
         }
 
         public List<Ognp> FindGroupOgnp(Ognp ognp)
