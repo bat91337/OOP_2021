@@ -81,7 +81,7 @@ namespace Shops.Tests
             Product product2 = _shopManager.AddProductInShop(123, 60, universumProduct, shop2);
             Product product21 = _shopManager.AddProductInShop(150, 60, universumProduct1, shop2);
             Shop shopWithMinimalPrice = _shopManager.FindMinimalPrices(listPersonProduct);
-            Assert.AreEqual(shopWithMinimalPrice.ShopId, shop1.ShopId);
+            Assert.AreEqual(shopWithMinimalPrice.ShopId, shop.ShopId);
         }
    
         [Test]
