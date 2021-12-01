@@ -7,17 +7,17 @@ namespace Shops.Models
 {
     public class ShopManager
     {
-        private readonly RepositoryListUniversumProduct _listproducts;
-        private readonly RepositoryListShop _repositoryListShops;
-        public ShopManager(RepositoryListUniversumProduct listproduct, RepositoryListShop repositoryListShops)
+        private readonly ProductRepository _listproducts;
+        private readonly ShopRepository _shopRepository;
+        public ShopManager(ProductRepository listproduct, ShopRepository shopRepository)
         {
             _listproducts = listproduct;
-            _repositoryListShops = repositoryListShops;
+            _shopRepository = shopRepository;
         }
 
-        public UniversumProducts AddInAllProduct(string name)
+        public Product AddInAllProduct(string name)
         {
-            var product = new UniversumProducts(name);
+            var product = new Product(name);
             _listproducts.AddAllProduct(product);
             return product;
         }
@@ -25,27 +25,27 @@ namespace Shops.Models
         public Shop AddShop(string name, string address)
         {
             var shop = new Shop(name, address);
-            _repositoryListShops.AddShops(shop);
+            _shopRepository.AddShops(shop);
             return shop;
         }
 
-        public Product AddProductInShop(decimal price, int amount, UniversumProducts product1, Shop shop)
+        public ShopProduct AddProductInShop(decimal price, int amount, Product product1, Shop shop)
         {
-            Shop shop1 = _repositoryListShops.GetListShop().First(shop1 => shop1.ShopId.Equals(shop.ShopId));
+            Shop shop1 = _shopRepository.GetListShop().First(shop1 => shop1.ShopId.Equals(shop.ShopId));
             {
-                var product = new Product(product1, price, amount);
+                var product = new ShopProduct(product1, price, amount);
                 shop1.Product.Add(product);
                 return product;
             }
         }
 
-        public Shop FindMinimalPrice(Product product, int amount)
+        public Shop FindMinimalPrice(ShopProduct shopProduct, int amount)
         {
             decimal price1 = decimal.MaxValue;
             Shop shop1 = null;
-            foreach (Shop shop in _repositoryListShops.GetListShop())
+            foreach (Shop shop in _shopRepository.GetListShop())
             {
-                foreach (Product product1 in shop.Product.Where(product1 => product1.Products.ProductId.Equals(product.Products.ProductId)))
+                foreach (ShopProduct product1 in shop.Product.Where(product1 => product1.Products.ProductId.Equals(shopProduct.Products.ProductId)))
                 {
                     if (product1.ProductAmount >= amount)
                     {
@@ -65,13 +65,13 @@ namespace Shops.Models
             return shop1;
         }
 
-        public void BuyOneProduct(Product product, int amount, Person person)
+        public void BuyOneProduct(ShopProduct shopProduct, int amount, Person person)
         {
-            Shop shop = FindMinimalPrice(product, amount);
-            shop.Buy(product, amount, person);
+            Shop shop = FindMinimalPrice(shopProduct, amount);
+            shop.Buy(shopProduct, amount, person);
         }
 
-        public PersonProduct AddProductInBasket(UniversumProducts products, int amount, Person person)
+        public PersonProduct AddProductInBasket(Product products, int amount, Person person)
         {
             var products2 = new PersonProduct(products, amount);
             person.PersonBasket.ProductsInBasket.Add(products2);
@@ -88,11 +88,11 @@ namespace Shops.Models
             decimal sum = 0;
             foreach (PersonProduct personProduct in basket)
             {
-                foreach (Shop shop1 in _repositoryListShops.GetListShop())
+                foreach (Shop shop1 in _shopRepository.GetListShop())
                 {
                     if (shop1.ShopId.Equals(shop.ShopId))
                     {
-                        foreach (Product product1 in shop1.Product.Where(product1 => product1.Products.ProductId.Equals(personProduct.Products.ProductId)))
+                        foreach (ShopProduct product1 in shop1.Product.Where(product1 => product1.Products.ProductId.Equals(personProduct.Products.ProductId)))
                         {
                             if (product1.ProductAmount >= personProduct.ProductAmount)
                             {
@@ -115,7 +115,7 @@ namespace Shops.Models
         {
             var dictionaryMinimalPrice = new Dictionary<Shop, decimal>();
             decimal minPrice = 0;
-            foreach (Shop shop in _repositoryListShops.GetListShop())
+            foreach (Shop shop in _shopRepository.GetListShop())
             {
                 decimal sum = CountSumForProducts(shop, basket);
                 if (sum.Equals(-1))
@@ -143,7 +143,7 @@ namespace Shops.Models
             foreach (PersonProduct product in basket)
             {
                 decimal sum = 0;
-                Product product1 = shop.Product.FirstOrDefault(product1 => product.Products.ProductId.Equals(product1.Products.ProductId));
+                ShopProduct product1 = shop.Product.FirstOrDefault(product1 => product.Products.ProductId.Equals(product1.Products.ProductId));
                 decimal sumForOneProduct = product.ProductAmount * product1.ProductPrice;
                 sum += sumForOneProduct;
                 if (sum <= person.PersonWallet)

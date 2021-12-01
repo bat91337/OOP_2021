@@ -3,25 +3,19 @@ namespace Shops.Models
 {
     public class Product
     {
-        public Product(UniversumProducts products, decimal price, int amount)
+        private static int _id;
+        public Product(string productName)
         {
-            if (amount <= 0)
+            ProductId = _id++;
+            if (string.IsNullOrWhiteSpace(productName))
             {
-                throw new ShopsException("the amount cannot be zero");
+                throw new ShopsException("empty line");
             }
 
-            ProductAmount = amount;
-            if (price <= 0)
-            {
-                throw new ShopsException("the price cannot be zero");
-            }
-
-            ProductPrice = price;
-            Products = products;
+            ProductName = productName;
         }
 
-        public decimal ProductPrice { get; set; }
-        public int ProductAmount { get; set; }
-        public UniversumProducts Products { get; }
+        public int ProductId { get; }
+        public string ProductName { get; }
     }
 }

@@ -3,11 +3,11 @@ using System.Linq;
 using Shops.Models;
 namespace Shops.Repositories
 {
-    public class RepositoryListShop
+    public class ShopRepository
     {
         private readonly List<Shop> _listShops;
 
-        public RepositoryListShop()
+        public ShopRepository()
         {
             _listShops = new List<Shop>();
         }
@@ -17,7 +17,7 @@ namespace Shops.Repositories
             return _listShops;
         }
 
-        public List<Product> GetListProductFromShop(Shop shop)
+        public List<ShopProduct> GetListProductFromShop(Shop shop)
         {
             Shop shop1 = _listShops.FirstOrDefault(shop1 => shop1.ShopId.Equals(shop.ShopId));
             return shop1.Product;

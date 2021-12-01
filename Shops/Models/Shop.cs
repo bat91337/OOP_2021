@@ -25,12 +25,12 @@ namespace Shops.Models
             ShopId = ++_id;
         }
 
-        public List<Product> Product { get; } = new List<Product>();
+        public List<ShopProduct> Product { get; } = new List<ShopProduct>();
         public string NameShop { get; }
         public string ShopAddress { get; }
 
         public int ShopId { get; }
-        public void ChangePrice(Product product, decimal newprice)
+        public void ChangePrice(ShopProduct shopProduct, decimal newprice)
         {
             if (newprice == 0)
             {
@@ -42,13 +42,13 @@ namespace Shops.Models
                 throw new ShopsException("the price cannot be less than zero");
             }
 
-            Product product1 = Product.FirstOrDefault(product1 => product1.Products.ProductId.Equals(product.Products.ProductId));
+            ShopProduct product1 = Product.FirstOrDefault(product1 => product1.Products.ProductId.Equals(shopProduct.Products.ProductId));
             product1.ProductPrice = newprice;
         }
 
-        public void Buy(Product product, int amount, Person person)
+        public void Buy(ShopProduct shopProduct, int amount, Person person)
         {
-            Product product1 = Product.First(product1 => product1.Products.ProductId.Equals(product.Products.ProductId));
+            ShopProduct product1 = Product.First(product1 => product1.Products.ProductId.Equals(shopProduct.Products.ProductId));
             {
                     if (product1.ProductAmount >= amount)
                     {
