@@ -1,10 +1,10 @@
 using Shops.Tools;
 namespace Shops.Models
 {
-    public class AllProducts
+    public class UniversumProducts
     {
         private static int _id;
-        public AllProducts(string productName)
+        public UniversumProducts(string productName)
         {
             ProductId = _id++;
             if (string.IsNullOrWhiteSpace(productName))

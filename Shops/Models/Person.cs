@@ -16,6 +16,11 @@ namespace Shops.Models
                 throw new ShopsException("empty line personName");
             }
 
+            if (money < PersonWallet)
+            {
+                throw new ShopsException("no empty money");
+            }
+
             PersonWallet += money;
             PersonBasket = new Basket();
         }

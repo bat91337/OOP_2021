@@ -3,11 +3,11 @@ using System.Linq;
 using Shops.Models;
 namespace Shops.Repositories
 {
-    public class ListShopRepository
+    public class RepositoryListShop
     {
         private readonly List<Shop> _listShops;
 
-        public ListShopRepository()
+        public RepositoryListShop()
         {
             _listShops = new List<Shop>();
         }

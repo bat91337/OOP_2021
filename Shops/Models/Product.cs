@@ -3,7 +3,7 @@ namespace Shops.Models
 {
     public class Product
     {
-        public Product(AllProducts products, decimal price, int amount)
+        public Product(UniversumProducts products, decimal price, int amount)
         {
             if (amount <= 0)
             {
@@ -22,6 +22,6 @@ namespace Shops.Models
 
         public decimal ProductPrice { get; set; }
         public int ProductAmount { get; set; }
-        public AllProducts Products { get; }
+        public UniversumProducts Products { get; }
     }
 }
