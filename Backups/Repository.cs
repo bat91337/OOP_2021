@@ -1,5 +1,5 @@
-using System;
 using System.Collections.Generic;
+using System.IO;
 using Ionic.Zip;
 
 namespace Backups
@@ -13,10 +13,10 @@ namespace Backups
 
         public List<Storage> Storages { get; }
 
-        public void CreateStorageZip(List<JobObject> jobObjects, IAlgorithm algorithm, string path, int id, Backupjob backupJob)
+        public void CreateStorageZip(List<JobObject> jobObjects, IAlgorithm algorithm, string path, string id, Backupjob backupJob)
         {
             string changedPath = path;
-            List<Storage> storages = backupJob.CreateStorages1(jobObjects, algorithm);
+            List<Storage> storages = backupJob.CreateStorages(jobObjects, algorithm);
             Storages.AddRange(storages);
             foreach (Storage storage in storages)
             {
@@ -29,23 +29,6 @@ namespace Backups
 
                 zipFile.Save(changedPath);
             }
-        }
-
-        public List<Storage> CreateStorageZipVirtual(List<JobObject> jobObjects, IAlgorithm algorithm, string path, int id, Backupjob backupJob)
-        {
-            string changedPath = path;
-            List<Storage> storages = backupJob.CreateStorages1(jobObjects, algorithm);
-            Storages.AddRange(storages);
-            foreach (Storage storage in storages)
-            {
-                foreach (JobObject jobObject in storage.JobObjects)
-                {
-                    var jobObject1 = new JobObject(jobObject.File.FullName);
-                    changedPath = $"{path}{jobObject1.File.Name}-{id}.zip";
-                }
-            }
-
-            return storages;
         }
     }
 }

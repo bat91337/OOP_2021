@@ -9,6 +9,6 @@ namespace Backups
             File = new FileInfo(path);
         }
 
-        public FileInfo File { get; }
+        public FileInfo File { get; set; }
     }
 }
