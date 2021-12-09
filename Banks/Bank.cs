@@ -105,7 +105,7 @@ namespace Banks
             {
                 if (string.IsNullOrWhiteSpace(address))
                 {
-                    Console.WriteLine("не коректно введены данные");
+                    Console.WriteLine("incorrect data entered");
                 }
                 else
                 {
@@ -116,11 +116,11 @@ namespace Banks
 
         public void AddNumberPhone(string passport, string numberPhone)
         {
-            foreach (var client in Client.Where(client => client.Passport.Equals(passport)))
+            foreach (Client client in Client.Where(client => client.Passport.Equals(passport)))
             {
                 if (string.IsNullOrWhiteSpace(numberPhone))
                 {
-                    Console.WriteLine("неверно введены данные");
+                    Console.WriteLine("incorrect data entered");
                 }
                 else
                 {
@@ -131,15 +131,12 @@ namespace Banks
 
         public CreditScore CreateCreditScore(string account, decimal money)
         {
-            foreach (Account account1 in Accounts)
+            foreach (Account account1 in Accounts.Where(account1 => account.Equals(account1.Id)))
             {
-                if (account.Equals(account1.Id))
-                {
-                    money += LimitCreditScore;
-                    var creditScore = new CreditScore(money, PercentCreditScore, LimitCreditScore, account1.Client, DateTime.Now);
-                    account1.Scores.Add(creditScore);
-                    return creditScore;
-                }
+                money += LimitCreditScore;
+                var creditScore = new CreditScore(money, PercentCreditScore, LimitCreditScore, account1.Client, DateTime.Now);
+                account1.Scores.Add(creditScore);
+                return creditScore;
             }
 
             return null;
@@ -147,7 +144,7 @@ namespace Banks
 
         public DebitScore CreateDebitScore(string account, decimal money)
         {
-            foreach (var account1 in Accounts.Where(account1 => account.Equals(account1.Id)))
+            foreach (Account account1 in Accounts.Where(account1 => account.Equals(account1.Id)))
             {
                 const decimal limit = 0;
                 var debitScore = new DebitScore(money, PercentDebitScore, limit, account1.Client, DateTime.Now);
@@ -165,17 +162,9 @@ namespace Banks
                 if (account.Equals(account1.Id))
                 {
                     decimal limit = money;
-                    DateTime dateTime = DateTime.Now;
                     foreach (KeyValuePair<decimal, decimal> pair in DictionaryDeposit)
                     {
-                        if (pair.Key < money)
-                        {
-                            money += pair.Key;
-                            var depositScore = new DepositScore(money, pair.Value, limit, account1.Client, DateTime.Now);
-                            account1.Scores.Add(depositScore);
-                            return depositScore;
-                        }
-                        else
+                        if (pair.Key > money)
                         {
                             var depositScore = new DepositScore(money, pair.Value, limit, account1.Client, DateTime.Now);
                             account1.Scores.Add(depositScore);

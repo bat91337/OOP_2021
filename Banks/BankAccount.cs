@@ -17,11 +17,11 @@ namespace Banks
 
         public decimal Percent { get; set; }
         public decimal ScoreMoney { get; set; }
-        public decimal Limit { get; set; }
-        public string NumberScore { get; set; }
-        public Client Client { get; set; }
-        public DateTime DateTime { get; set; }
-        public string Id { get; set; }
+        public decimal Limit { get; }
+        public string NumberScore { get; }
+        public Client Client { get; }
+        public DateTime DateTime { get; }
+        public string Id { get; }
 
         public void Transactions(decimal money, DateTime currentTime)
         {

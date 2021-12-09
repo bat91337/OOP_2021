@@ -30,12 +30,11 @@ namespace Banks.Scores
         public override void ChargePercent(DateTime dateTime, DateTime dateTime1)
         {
             TimeSpan dayMonth = dateTime.Subtract(dateTime1);
-            if (ScoreMoney < Limit)
+            if (ScoreMoney >= Limit)
             {
-                if (dayMonth.Days <= 28)
+                if (dayMonth.Days >= 28)
                 {
-                    decimal commission = Limit - ScoreMoney;
-                    decimal commissionMonth = commission * Percent * 30;
+                    decimal commissionMonth = ScoreMoney * Percent * 30;
                     ScoreMoney += commissionMonth;
                 }
             }

@@ -17,7 +17,7 @@ namespace Banks.Scores
         }
         else
         {
-            Console.WriteLine("not have money");
+            Console.WriteLine("no money");
         }
     }
 
@@ -31,7 +31,7 @@ namespace Banks.Scores
             TimeSpan dayMonth = dateTime.Subtract(dateTime1);
             if (ScoreMoney < 0)
             {
-                if (dayMonth.Days <= 28)
+                if (dayMonth.Days >= 28)
                 {
                     decimal commission = Limit - ScoreMoney;
                     decimal commissionMonth = commission * Percent * 30;

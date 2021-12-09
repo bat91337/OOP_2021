@@ -17,7 +17,7 @@ namespace Banks.Scores
             }
             else
             {
-                Console.WriteLine("денег нет");
+                Console.WriteLine("no money");
             }
         }
 

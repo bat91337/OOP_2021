@@ -29,7 +29,7 @@ namespace Banks.Tests
         }
 
         [Test]
-        public void Translation()
+        public void Transaction()
         {
             Bank bank = _centralBank.CreateBank("сбер", 1, 2, 7000, 50000, 3);
             bank.DictionaryDeposit.Add(10000, 4);
@@ -45,7 +45,7 @@ namespace Banks.Tests
         }
 
         [Test]
-        public void CancelTranslation()
+        public void CancelTransaction()
         {
             Bank bank = _centralBank.CreateBank("сбер", 1, 2, 7000, 50000, 3);
             bank.DictionaryDeposit.Add(10000, 4);
@@ -59,6 +59,22 @@ namespace Banks.Tests
             Transactions translation = bank.Transaction(account.Id, bankAccount.Id, bankAccount1.Id, 600 );
             bank.CancelTransaction(translation.Id);
             Assert.AreEqual(bankAccount.ScoreMoney, 1000);
+        }
+
+        [Test]
+        public void ChargePercentForDepositScore()
+        {
+            Bank bank = _centralBank.CreateBank("сбер", 1, 2, 7000, 5000, 3);
+            bank.DictionaryDeposit.Add(10000, 4);
+            bank.DictionaryDeposit.Add(decimal.MaxValue, 5);
+            Client client = bank.CreateClient("vasya", "ivanov", "123456789",  "pushkina 13", "123456789");
+            Account account = bank.CreateAccount(client);
+            BankAccount bankAccount = bank.CreateDepositScore(account.Id, 11000);
+            _centralBank.AddDays(30);
+            bank.AddDays(30);
+            bank.ChargePercent();
+            Assert.AreEqual(bankAccount.ScoreMoney, 1661000);
+            
         }
     }
 }
