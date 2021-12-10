@@ -5,10 +5,6 @@ namespace Backups
 {
     public class SingleAlgorithm : IAlgorithm
     {
-        public SingleAlgorithm()
-        {
-        }
-
         public List<Storage> CreateStorages(List<JobObject> jobObjects)
         {
             var storages = new List<Storage>();

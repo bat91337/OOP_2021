@@ -4,11 +4,11 @@ namespace Backups
 {
     public class JobObject
     {
-        public JobObject(string path)
+        public JobObject(string path, string name)
         {
-            File = new FileInfo(path);
+            File = new FileInfoCustom(path, name);
         }
 
-        public FileInfo File { get; set; }
+        public FileInfoCustom File { get; }
     }
 }

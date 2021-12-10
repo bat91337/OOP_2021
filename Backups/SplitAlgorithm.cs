@@ -3,10 +3,6 @@ namespace Backups
 {
     public class SplitAlgorithm : IAlgorithm
     {
-        public SplitAlgorithm()
-        {
-        }
-
         public List<Storage> CreateStorages(List<JobObject> jobObjects)
         {
             var storages = new List<Storage>();

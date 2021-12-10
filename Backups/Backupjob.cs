@@ -11,7 +11,7 @@ namespace Backups
 
         public List<JobObject> JobObjects { get; }
         public List<RestorePoint> RestorePoints { get; }
-        public List<Storage> CreateStorages(List<JobObject> jobObjects, IAlgorithm algorithm)
+        public List<Storage> CreateStorages1(List<JobObject> jobObjects, IAlgorithm algorithm)
         {
             var restorePoints = new RestorePoint(algorithm);
             List<Storage> storages = restorePoints.Algorithm.CreateStorages(jobObjects);
@@ -21,7 +21,7 @@ namespace Backups
         public void CreateRestorePoint(string path, List<JobObject> jobObjects, IAlgorithm algorithm)
         {
             var backupJob = new Backupjob();
-            List<Storage> storages = backupJob.CreateStorages(jobObjects, algorithm);
+            List<Storage> storages = backupJob.CreateStorages1(jobObjects, algorithm);
             var restorePoints = new RestorePoint(algorithm);
             restorePoints.ListStorages.AddRange(storages);
             RestorePoints.Add(restorePoints);

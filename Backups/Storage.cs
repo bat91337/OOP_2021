@@ -11,5 +11,10 @@ namespace Backups
         }
 
         public List<JobObject> JobObjects { get; }
+
+        // public List<JobObject> AddJobObject
+        // {
+        //
+        // }
     }
 }
