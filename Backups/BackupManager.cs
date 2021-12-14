@@ -26,16 +26,15 @@ namespace Backups
             BackupJob.JobObjects.Remove(jobObject);
         }
 
-        public void CreateBackup(IAlgorithm algorithm, string path, List<JobObject> jobObjects, IRepository repository, Backupjob backupJob)
+        public void CreateBackup(IAlgorithm algorithm, string path, List<JobObject> jobObjects, IRepository repository, DateTime dateTime)
         {
-            repository.CreateStorageZip(jobObjects, algorithm, path, _zipId, backupJob);
-            backupJob.CreateRestorePoint(path, jobObjects, algorithm);
+            repository.CreateStorageZip(jobObjects, algorithm, path, _zipId, BackupJob, dateTime);
+            BackupJob.CreateRestorePoint(jobObjects, algorithm, BackupJob, dateTime);
         }
 
-        public void CreateBackupVirtual(IAlgorithm algorithm, string path, List<JobObject> jobObjects, IRepository repository, Backupjob backupJob)
+        public Backupjob GetBackupJob()
         {
-            repository.CreateStorageZip(jobObjects, algorithm, path, _zipId, backupJob);
-            backupJob.CreateRestorePoint(path, jobObjects, algorithm);
+            return BackupJob;
         }
     }
 }

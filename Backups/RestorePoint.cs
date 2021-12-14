@@ -5,9 +5,9 @@ namespace Backups
 {
     public class RestorePoint
     {
-        public RestorePoint(IAlgorithm algorithm)
+        public RestorePoint(IAlgorithm algorithm, DateTime dateTime)
         {
-            Date = DateTime.Now;
+            Date = dateTime;
             ListStorages = new List<Storage>();
             Algorithm = algorithm;
         }

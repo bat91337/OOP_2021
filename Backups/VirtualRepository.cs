@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 namespace Backups
@@ -10,9 +11,9 @@ namespace Backups
         }
 
         public List<Storage> Storages { get; }
-        public List<Storage> CreateStorageZip(List<JobObject> jobObjects, IAlgorithm algorithm, string path, string id, Backupjob backupJob)
+        public List<Storage> CreateStorageZip(List<JobObject> jobObjects, IAlgorithm algorithm, string path, string id, Backupjob backupJob, DateTime dateTime)
         {
-            List<Storage> storages = backupJob.CreateStorages1(jobObjects, algorithm);
+            List<Storage> storages = backupJob.CreateStorages1(jobObjects, algorithm, dateTime);
             Storages.AddRange(storages);
             foreach (Storage storage in storages)
             {

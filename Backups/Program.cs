@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Backups
 {
@@ -7,13 +8,13 @@ namespace Backups
         private static void Main()
         {
             var repository = new VirtualRepository();
-            var backupJob = new Backupjob();
             var backupManager = new BackupManager();
             var jobObject = new JobObject(@"../../../Files/FileA", "FileA");
             List<JobObject> jobObjects = backupManager.AddJobObject(@"../../../Files/FileB", "FileA");
             jobObjects.Add(jobObject);
             IAlgorithm single = new SingleAlgorithm();
-            backupManager.CreateBackup(single, @"../../../BackupFiles/Single", jobObjects, repository, backupJob);
+            DateTime dateTime = DateTime.Now;
+            backupManager.CreateBackup(single, @"../../../BackupFiles/Single", jobObjects, repository, dateTime);
         }
     }
 }

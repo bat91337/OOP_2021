@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 namespace Backups
 {
@@ -11,18 +12,17 @@ namespace Backups
 
         public List<JobObject> JobObjects { get; }
         public List<RestorePoint> RestorePoints { get; }
-        public List<Storage> CreateStorages1(List<JobObject> jobObjects, IAlgorithm algorithm)
+        public List<Storage> CreateStorages1(List<JobObject> jobObjects, IAlgorithm algorithm, DateTime dateTime)
         {
-            var restorePoints = new RestorePoint(algorithm);
+            var restorePoints = new RestorePoint(algorithm, dateTime);
             List<Storage> storages = restorePoints.Algorithm.CreateStorages(jobObjects);
             return storages;
         }
 
-        public void CreateRestorePoint(string path, List<JobObject> jobObjects, IAlgorithm algorithm)
+        public void CreateRestorePoint(List<JobObject> jobObjects, IAlgorithm algorithm, Backupjob backupJob, DateTime dateTime)
         {
-            var backupJob = new Backupjob();
-            List<Storage> storages = backupJob.CreateStorages1(jobObjects, algorithm);
-            var restorePoints = new RestorePoint(algorithm);
+            List<Storage> storages = backupJob.CreateStorages1(jobObjects, algorithm, dateTime);
+            var restorePoints = new RestorePoint(algorithm, dateTime);
             restorePoints.ListStorages.AddRange(storages);
             RestorePoints.Add(restorePoints);
         }

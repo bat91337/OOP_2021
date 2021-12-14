@@ -1,9 +1,10 @@
+using System;
 using System.Collections.Generic;
 
 namespace Backups
 {
     public interface IRepository
     {
-        List<Storage> CreateStorageZip(List<JobObject> jobObjects, IAlgorithm algorithm, string path, string id, Backupjob backupJob);
+        List<Storage> CreateStorageZip(List<JobObject> jobObjects, IAlgorithm algorithm, string path, string id, Backupjob backupJob, DateTime dateTime);
     }
 }
