@@ -18,13 +18,13 @@ namespace Banks.Tests
             Bank bank = _centralBank.CreateBank("сбер", 1, 2, 7000, 50000, 3);
             bank.DictionaryDeposit.Add(10000, 4);
             bank.DictionaryDeposit.Add(10001, 5);
-            Client client = bank.CreateClient("vasya", "ivanov", "123456789",  "pushkina 13", "123456789");
+            Client client = bank.CreateClient();
             Account account = bank.CreateAccount(client);
             BankAccount bankAccount = bank.CreateCreditScore(account.Id, 0);
             bank.RaiseMoney(account.Id, 100);
             _centralBank.AddDays(30);
             bank.AddDays(30);
-            bank.ChargePercent();
+            bank.ChargePercent(30);
             Assert.AreEqual(bankAccount.ScoreMoney, 900);
         }
 
@@ -34,13 +34,13 @@ namespace Banks.Tests
             Bank bank = _centralBank.CreateBank("сбер", 1, 2, 7000, 50000, 3);
             bank.DictionaryDeposit.Add(10000, 4);
             bank.DictionaryDeposit.Add(10001, 5);
-            Client client = bank.CreateClient("vasya", "ivanov", "123456789",  "pushkina 13", "123456789");
+            Client client = bank.CreateClient();
             Account account = bank.CreateAccount(client);
             BankAccount bankAccount = bank.CreateDebitScore(account.Id, 1000);
-            Client client1 = bank.CreateClient("vasya", "ivanov", "123456789",  "pushkina 13", "123456789");
+            Client client1 = bank.CreateClient();
             Account account1 = bank.CreateAccount(client);
             BankAccount bankAccount1 = bank.CreateDebitScore(account.Id, 0);
-            bank.Transaction(account.Id, bankAccount.Id, bankAccount1.Id, 600 );
+            bank.Transaction(account.Id, bankAccount.NumberScore, 600 );
             Assert.AreEqual(bankAccount.ScoreMoney, 400);
         }
 
@@ -50,13 +50,13 @@ namespace Banks.Tests
             Bank bank = _centralBank.CreateBank("сбер", 1, 2, 7000, 50000, 3);
             bank.DictionaryDeposit.Add(10000, 4);
             bank.DictionaryDeposit.Add(10001, 5);
-            Client client = bank.CreateClient("vasya", "ivanov", "123456789",  "pushkina 13", "123456789");
+            Client client = bank.CreateClient();
             Account account = bank.CreateAccount(client);
             BankAccount bankAccount = bank.CreateDebitScore(account.Id, 1000);
-            Client client1 = bank.CreateClient("vasya", "ivanov", "123456789",  "pushkina 13", "123456789");
+            Client client1 = bank.CreateClient();
             Account account1 = bank.CreateAccount(client);
             BankAccount bankAccount1 = bank.CreateDebitScore(account.Id, 0);
-            Transactions translation = bank.Transaction(account.Id, bankAccount.Id, bankAccount1.Id, 600 );
+            Transactions translation = bank.Transaction(account.Id, bankAccount.NumberScore, 600 );
             bank.CancelTransaction(translation.Id);
             Assert.AreEqual(bankAccount.ScoreMoney, 1000);
         }
@@ -67,12 +67,12 @@ namespace Banks.Tests
             Bank bank = _centralBank.CreateBank("сбер", 1, 2, 7000, 5000, 3);
             bank.DictionaryDeposit.Add(10000, 4);
             bank.DictionaryDeposit.Add(decimal.MaxValue, 5);
-            Client client = bank.CreateClient("vasya", "ivanov", "123456789",  "pushkina 13", "123456789");
+            Client client = bank.CreateClient();
             Account account = bank.CreateAccount(client);
             BankAccount bankAccount = bank.CreateDepositScore(account.Id, 11000);
             _centralBank.AddDays(30);
             bank.AddDays(30);
-            bank.ChargePercent();
+            bank.ChargePercent(30);
             Assert.AreEqual(bankAccount.ScoreMoney, 1661000);
             
         }

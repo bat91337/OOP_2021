@@ -12,7 +12,6 @@ namespace Banks
             NumberScore = Guid.NewGuid().ToString();
             Client = client;
             DateTime = dateTime;
-            Id = Guid.NewGuid().ToString();
         }
 
         public decimal Percent { get; set; }
@@ -21,14 +20,6 @@ namespace Banks
         public string NumberScore { get; }
         public Client Client { get; }
         public DateTime DateTime { get; }
-        public string Id { get; }
-
-        public void Transactions(decimal money, DateTime currentTime)
-        {
-            RaiseMoney(money);
-            PutMoney(money);
-            ChargePercent(currentTime, DateTime);
-        }
 
         public virtual void RaiseMoney(decimal money)
         {
@@ -38,7 +29,7 @@ namespace Banks
         {
         }
 
-        public virtual void ChargePercent(DateTime currentTime, DateTime dateTime)
+        public virtual void ChargePercent(int days)
         {
         }
     }

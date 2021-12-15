@@ -1,4 +1,5 @@
 using System;
+using Banks.Tools;
 
 namespace Banks.Scores
 {
@@ -10,34 +11,27 @@ namespace Banks.Scores
         }
 
         public override void RaiseMoney(decimal money)
-    {
-        if (ScoreMoney >= money)
         {
-            ScoreMoney -= money;
+            if (ScoreMoney >= money)
+            {
+                ScoreMoney -= money;
+            }
+            else
+            {
+                throw new BanksException("no money");
+            }
         }
-        else
-        {
-            Console.WriteLine("no money");
-        }
-    }
 
         public override void PutMoney(decimal money)
         {
             ScoreMoney += money;
         }
 
-        public override void ChargePercent(DateTime dateTime, DateTime dateTime1)
+        public override void ChargePercent(int days)
         {
-            TimeSpan dayMonth = dateTime.Subtract(dateTime1);
-            if (ScoreMoney < 0)
-            {
-                if (dayMonth.Days >= 28)
-                {
-                    decimal commission = Limit - ScoreMoney;
-                    decimal commissionMonth = commission * Percent * 30;
-                    ScoreMoney += commissionMonth;
-                }
-            }
+            decimal commission = Limit - ScoreMoney;
+            decimal commissionMonth = commission * Percent * days;
+            ScoreMoney += commissionMonth;
         }
     }
 }

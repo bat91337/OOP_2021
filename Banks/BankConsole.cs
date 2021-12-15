@@ -24,7 +24,7 @@ namespace Banks
             string address = Console.ReadLine();
             Console.WriteLine("enter phone number");
             string numberPhone = Console.ReadLine();
-            _bank.CreateClient(firstName, lastName, passport, address, numberPhone);
+            _bank.CreateClient();
         }
 
         public void CreateCreditScoreConsole()
@@ -42,7 +42,9 @@ namespace Banks
             string id = Console.ReadLine();
             Console.WriteLine("how much money do you want to put in?");
             decimal money = decimal.Parse(Console.ReadLine());
-            _bank.PutMoney(id, money);
+            Console.WriteLine("how much money do you want to withdraw?");
+            string idBankAccount = Console.ReadLine();
+            _bank.PutMoney(id, money, idBankAccount);
         }
 
         public void RaiseMoneyConsole()
@@ -51,6 +53,8 @@ namespace Banks
             string id = Console.ReadLine();
             Console.WriteLine("how much money do you want to withdraw?");
             decimal money = decimal.Parse(Console.ReadLine());
+            Console.WriteLine("how much money do you want to withdraw?");
+            string idBankAccount = Console.ReadLine();
             _bank.RaiseMoney(id, money);
         }
 
@@ -64,7 +68,7 @@ namespace Banks
             string id1 = Console.ReadLine();
             Console.WriteLine("enter the amount");
             decimal sum = decimal.Parse(Console.ReadLine());
-            _bank.Transaction(account, id, id1, sum);
+            _bank.Transaction(account, id, sum);
         }
 
         public void CreateDebitScoreConsole()

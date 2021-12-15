@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Dynamic;
 using System.Linq;
 using Banks.Scores;
+using Banks.Tools;
 
 namespace Banks
 {
@@ -37,19 +38,19 @@ namespace Banks
         public Dictionary<decimal, decimal> DictionaryDeposit { get; set; }
         public List<Transactions> TransactionsList { get; }
 
-        public void ChangePercentCreditScore(decimal percent, CreditScore score)
+        public void ChangePercentCreditScore(CreditScore score)
         {
-            string message = "your percent has changed to";
+            string message = "your percent has changed to" + score.Percent;
             NotifyObservers(message);
         }
 
-        public void ChangePercentDebitScore(decimal percent, DebitScore score)
+        public void ChangePercentDebitScore(DebitScore score)
         {
-            string message = "your percent has changed to";
+            string message = "your percent has changed to" + score.Percent;
             NotifyObservers(message);
         }
 
-        public void ChangePercentDepositScore(decimal percent, DepositScore score)
+        public void ChangePercentDepositScore(DepositScore score)
         {
             string message = "your percent has changed to" + score.Percent;
             NotifyObservers(message);
@@ -78,14 +79,9 @@ namespace Banks
             Message.Add(str);
         }
 
-        public Client CreateClient(string firstName, string lastName, string passport, string address, string numberPhone)
+        public Client CreateClient()
         {
             var clientBuilder = new ClientBuilder();
-            clientBuilder.SetFirstNAme(firstName);
-            clientBuilder.SetName(lastName);
-            clientBuilder.SetNumberPhone(passport);
-            clientBuilder.SetAddress(address);
-            clientBuilder.SetNumberPhone(numberPhone);
             Client client = clientBuilder.Build();
             AddObserver(client);
             Client.Add(client);
@@ -105,7 +101,7 @@ namespace Banks
             {
                 if (string.IsNullOrWhiteSpace(address))
                 {
-                    Console.WriteLine("incorrect data entered");
+                    throw new BanksException("incorrect data entered");
                 }
                 else
                 {
@@ -120,7 +116,7 @@ namespace Banks
             {
                 if (string.IsNullOrWhiteSpace(numberPhone))
                 {
-                    Console.WriteLine("incorrect data entered");
+                    throw new BanksException("incorrect data entered");
                 }
                 else
                 {
@@ -129,9 +125,9 @@ namespace Banks
             }
         }
 
-        public CreditScore CreateCreditScore(string account, decimal money)
+        public CreditScore CreateCreditScore(string id, decimal money)
         {
-            foreach (Account account1 in Accounts.Where(account1 => account.Equals(account1.Id)))
+            foreach (Account account1 in Accounts.Where(account1 => id.Equals(account1.Id)))
             {
                 money += LimitCreditScore;
                 var creditScore = new CreditScore(money, PercentCreditScore, LimitCreditScore, account1.Client, DateTime.Now);
@@ -139,7 +135,7 @@ namespace Banks
                 return creditScore;
             }
 
-            return null;
+            throw new BanksException("failed to create account");
         }
 
         public DebitScore CreateDebitScore(string account, decimal money)
@@ -152,7 +148,7 @@ namespace Banks
                 return debitScore;
             }
 
-            return null;
+            throw new BanksException("failed to create account");
         }
 
         public DepositScore CreateDepositScore(string account, decimal money)
@@ -174,14 +170,14 @@ namespace Banks
                 }
             }
 
-            return null;
+            throw new BanksException("failed to create account");
         }
 
-        public void ChargePercent()
+        public void ChargePercent(int days)
         {
             foreach (BankAccount score in Accounts.SelectMany(account => account.Scores))
             {
-                score.ChargePercent(CurrentDate,  score.DateTime);
+                score.ChargePercent(days);
             }
         }
 
@@ -195,51 +191,35 @@ namespace Banks
             }
         }
 
-        public void PutMoney(string id, decimal money)
+        public void PutMoney(string idAccount, decimal money, string idBankAccount)
         {
-            foreach (BankAccount score in Accounts.Where(account => account.Id.Equals(id)).SelectMany(account => account.Scores))
-            {
-                score.PutMoney(money);
-                var transaction = new Transactions(id, money);
-                TransactionsList.Add(transaction);
-            }
+            Account account = Accounts.FirstOrDefault(account => account.Id.Equals(idAccount));
+            BankAccount score = account.Scores.FirstOrDefault(score => score.NumberScore.Equals(idBankAccount));
+            score.PutMoney(money);
+            var transaction = new Transactions(idAccount, money);
+            TransactionsList.Add(transaction);
         }
 
-        public BankAccount SearchScore(string id1)
+        public BankAccount SearchScore(string id)
         {
             foreach (Account account in Accounts)
             {
-                foreach (BankAccount score in account.Scores.Where(score => score.Id.Equals(id1)))
-                {
-                    return score;
-                }
+                BankAccount score = account.Scores.FirstOrDefault(bankAccount => bankAccount.NumberScore.Equals(id));
+                return score;
             }
 
             return null;
         }
 
-        public Transactions Transaction(string account, string id, string id1, decimal sum)
+        public Transactions Transaction(string idBankAccount, string idAccount, decimal sum)
         {
-            foreach (Account accounts in Accounts)
-            {
-                if (accounts.Id.Equals(account))
-                {
-                    foreach (BankAccount score in accounts.Scores)
-                    {
-                        if (score.Id.Equals(id))
-                        {
-                            BankAccount score1 = SearchScore(id1);
-                            score1.ScoreMoney += sum;
-                            score.ScoreMoney -= sum;
-                            var transaction = new Transactions(id, sum, id1);
-                            TransactionsList.Add(transaction);
-                            return transaction;
-                        }
-                    }
-                }
-            }
-
-            return null;
+            BankAccount score = SearchScore(idBankAccount);
+            BankAccount score1 = SearchScore(idAccount);
+            score1.ScoreMoney += sum;
+            score.ScoreMoney -= sum;
+            var transaction = new Transactions(idBankAccount, sum, idAccount);
+            TransactionsList.Add(transaction);
+            return transaction;
         }
 
         public void CancelTransaction(string id)
