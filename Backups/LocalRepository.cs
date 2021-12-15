@@ -1,35 +1,33 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using Ionic.Zip;
 
 namespace Backups
 {
     public class LocalRepository : IRepository
     {
-        public LocalRepository()
-        {
-            Storages = new List<Storage>();
-        }
-
-        public List<Storage> Storages { get; }
-        public List<Storage> CreateStorageZip(List<JobObject> jobObjects, IAlgorithm algorithm, string path, string id, Backupjob backupJob, DateTime dateTime)
+        public void CreateStorageZip(List<JobObject> jobObjects, IAlgorithm algorithm, string path, string id, Backupjob backupJob, DateTime dateTime, RestorePoint restorePoint)
         {
             string changedPath = path;
-            List<Storage> storages = backupJob.CreateStorages1(jobObjects, algorithm, dateTime);
-            Storages.AddRange(storages);
+
+            List<Storage> storages = restorePoint.Algorithm.CreateStorages(jobObjects);
+            string newPath = $"{path}/{restorePoint.NameDirectory}";
+            var directory = new DirectoryInfo(newPath);
+            directory.Create();
             foreach (Storage storage in storages)
             {
                 var zipFile = new ZipFile();
                 foreach (JobObject jobObject in storage.JobObjects)
                 {
                     zipFile.AddFile(jobObject.File.Path);
-                    changedPath = $"{path}{jobObject.File.Name}-{id}.zip";
+                    changedPath = $"{directory.FullName}{jobObject.File.Name}-{id}.zip";
                 }
 
                 zipFile.Save(changedPath);
             }
 
-            return storages;
+            restorePoint.ListStorages.AddRange(storages);
         }
     }
 }

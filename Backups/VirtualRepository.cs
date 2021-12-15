@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 
 namespace Backups
 {
@@ -11,20 +12,22 @@ namespace Backups
         }
 
         public List<Storage> Storages { get; }
-        public List<Storage> CreateStorageZip(List<JobObject> jobObjects, IAlgorithm algorithm, string path, string id, Backupjob backupJob, DateTime dateTime)
+        public void CreateStorageZip(List<JobObject> jobObjects, IAlgorithm algorithm, string path, string id, Backupjob backupJob, DateTime dateTime, RestorePoint restorePoint)
         {
-            List<Storage> storages = backupJob.CreateStorages1(jobObjects, algorithm, dateTime);
-            Storages.AddRange(storages);
-            foreach (Storage storage in storages)
+            string changedPath = path;
+            List<Storage> storages = restorePoint.Algorithm.CreateStorages(jobObjects);
+            string newPath = $"{path}/{restorePoint.NameDirectory}";
+            var directory = new DirectoryInfo(newPath);
+            foreach (Storage storage in Storages)
             {
                 foreach (JobObject jobObject in storage.JobObjects)
                 {
-                    string changedPath = $"{path}-{id}.zip";
+                    changedPath = $"{directory.FullName}{jobObject.File.Name}-{id}.zip";
                     jobObject.File.Path = changedPath;
                 }
             }
 
-            return storages;
+            restorePoint.ListStorages.AddRange(storages);
         }
     }
 }

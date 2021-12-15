@@ -9,9 +9,9 @@ namespace BackupsExtra
 {
     public class Serialization
     {
-        public void CreateRestorePointJson(IAlgorithm algorithm, DateTime dateTime)
+        public void CreateRestorePointJson(IAlgorithm algorithm, DateTime dateTime, string path)
         {
-            var restorePoint = new RestorePoint(algorithm, dateTime);
+            var restorePoint = new RestorePoint(algorithm, dateTime, path);
             var fs = new FileStream(@"../../../RestorePoint/file.json", FileMode.OpenOrCreate);
             JsonSerializer.SerializeAsync<RestorePoint>(fs, restorePoint);
         }

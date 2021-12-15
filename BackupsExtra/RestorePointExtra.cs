@@ -6,10 +6,12 @@
 // {
 //     public class RestorePointExtra : RestorePoint
 //     {
-//         public RestorePointExtra(IAlgorithm algorithm, DateTime dateTime)
-//             : base(algorithm)
+//         public RestorePointExtra(IAlgorithm algorithm, DateTime dateTime, string pathZip)
+//             : base(algorithm, dateTime)
 //         {
-//             Date = dateTime;
+//             PathZip = pathZip;
 //         }
+//
+//         public string PathZip { get; }
 //     }
 // }

@@ -5,12 +5,13 @@ namespace Backups
 {
     public class BackupManager
     {
-        private static string _zipId;
         public BackupManager()
         {
             BackupJob = new Backupjob();
-            _zipId = Guid.NewGuid().ToString();
+            ZipId = Guid.NewGuid().ToString();
         }
+
+        private string ZipId { get; }
 
         private Backupjob BackupJob { get; }
 
@@ -26,16 +27,16 @@ namespace Backups
             BackupJob.JobObjects.Remove(jobObject);
         }
 
-        public virtual void CreateBackup(IAlgorithm algorithm, string path, List<JobObject> jobObjects, IRepository repository, Backupjob backupJob, DateTime dateTime)
+        public void CreateBackup(IAlgorithm algorithm, string path, List<JobObject> jobObjects, IRepository repository, DateTime dateTime)
         {
-            repository.CreateStorageZip(jobObjects, algorithm, path, _zipId, backupJob, dateTime);
-            backupJob.CreateRestorePoint(path, jobObjects, algorithm, dateTime);
+            var restorePoint = new RestorePoint(algorithm, dateTime, path);
+            repository.CreateStorageZip(jobObjects, algorithm, path, ZipId, BackupJob, dateTime, restorePoint);
+            BackupJob.RestorePoints.Add(restorePoint);
         }
 
-        // public void CreateBackupVirtual(IAlgorithm algorithm, string path, List<JobObject> jobObjects, IRepository repository, Backupjob backupJob)
-        // {
-        //     repository.CreateStorageZip(jobObjects, algorithm, path, _zipId);
-        //     backupJob.CreateRestorePoint(path, jobObjects, algorithm);
-        // }
+        public Backupjob GetBackupjob()
+        {
+            return BackupJob;
+        }
     }
 }
