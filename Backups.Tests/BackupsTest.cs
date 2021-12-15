@@ -25,9 +25,16 @@ namespace Backups.Tests
             IAlgorithm split = new SplitAlgorithm();
             DateTime dateTime = DateTime.Now;
             _backupManager.CreateBackup(split, @"../../../BackupFiles/", jobObjects1, repository, dateTime);
-            _backupManager.RemoveJobObject(jobObject); 
+            _backupManager.RemoveJobObject(jobObject);
+            jobObjects1.Remove(jobObject);
             _backupManager.CreateBackup(split, @"../../../BackupFiles/", jobObjects1, repository, dateTime);
-            Assert.AreEqual(repository.Storages.Count, 3);
+            Backupjob backupjob = _backupManager.GetBackupJob();
+            int storageCount = 0;
+            foreach (RestorePoint restorePoint in backupjob.RestorePoints)
+            {
+                storageCount += restorePoint.ListStorages.Count;
+            }
+            Assert.AreEqual(storageCount, 3);
             Assert.AreEqual(_backupManager.GetBackupJob().RestorePoints.Count, 2);
         }
     [Test]
@@ -40,7 +47,7 @@ namespace Backups.Tests
         IAlgorithm single = new SingleAlgorithm();
         DateTime dateTime = DateTime.Now;
         _backupManager.CreateBackup(single, @"../../../BackupFiles/Single", jobObjects, repository, dateTime);
-        Assert.AreEqual(repository.Storages.Count, 1);
+        Assert.AreEqual(_backupManager.GetBackupJob().RestorePoints.Count, 1);
     }
      }
 }

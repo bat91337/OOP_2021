@@ -28,8 +28,9 @@ namespace Backups
 
         public void CreateBackup(IAlgorithm algorithm, string path, List<JobObject> jobObjects, IRepository repository, DateTime dateTime)
         {
-            repository.CreateStorageZip(jobObjects, algorithm, path, _zipId, BackupJob, dateTime);
-            BackupJob.CreateRestorePoint(jobObjects, algorithm, BackupJob, dateTime);
+            var restorePoint = new RestorePoint(algorithm, dateTime, path);
+            repository.CreateStorageZip(jobObjects, algorithm, path, _zipId, BackupJob, dateTime, restorePoint);
+            BackupJob.RestorePoints.Add(restorePoint);
         }
 
         public Backupjob GetBackupJob()
