@@ -12,5 +12,16 @@ namespace Backups
 
         public List<JobObject> JobObjects { get; }
         public List<RestorePoint> RestorePoints { get; }
+        public List<JobObject> AddJobObject(string path, string name)
+        {
+            var jobObject = new JobObject(path, name);
+            JobObjects.Add(jobObject);
+            return JobObjects;
+        }
+
+        public void RemoveJobObject(JobObject jobObject)
+        {
+            JobObjects.Remove(jobObject);
+        }
     }
 }
