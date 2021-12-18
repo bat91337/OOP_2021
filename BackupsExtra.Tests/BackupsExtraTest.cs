@@ -61,7 +61,7 @@ namespace BackupsExtra.Tests
             DateTime addDays = dateTime.AddDays(30);
             _backupManager.CreateBackup(single, @"../../../BackupFiles/", jobObjects1, repository, addDays);
             Backupjob backupJob = _backupManager.GetBackupjob();
-            _backupsExtraManager.Merge4(backupJob);
+            _backupsExtraManager.Merge(backupJob);
             Assert.AreEqual(backupJob.RestorePoints.Count, 1);
         }
         [Test]
@@ -80,7 +80,7 @@ namespace BackupsExtra.Tests
             dateTime.AddDays(30);
             _backupManager.CreateBackup(split, @"../../../BackupFiles/", jobObjects2, repository, dateTime);
             Backupjob backupJob = _backupManager.GetBackupjob();
-            _backupsExtraManager.Merge4(backupJob);
+            _backupsExtraManager.Merge(backupJob);
             int storageCount = 0;
             foreach (RestorePoint restorePoint in backupJob.RestorePoints)
             {
