@@ -38,7 +38,7 @@ namespace Backups.Tests
             Assert.AreEqual(_backupManager.GetBackupJob().RestorePoints.Count, 2);
         }
     [Test]
-    public void CreateSplitStorages1()
+    public void CreateSingleStorages()
     {
         var repository = new VirtualRepository();
         var jobObject = new JobObject(@"../../../Files/FileA", "FileA");
