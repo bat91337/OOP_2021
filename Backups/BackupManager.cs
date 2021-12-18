@@ -11,9 +11,8 @@ namespace Backups
             ZipId = Guid.NewGuid().ToString();
         }
 
-        private string ZipId { get; }
-
-        private Backupjob BackupJob { get; }
+        public Backupjob BackupJob { get; }
+        protected string ZipId { get; }
 
         public List<JobObject> AddJobObject(string path, string name)
         {
@@ -27,11 +26,12 @@ namespace Backups
             BackupJob.JobObjects.Remove(jobObject);
         }
 
-        public void CreateBackup(IAlgorithm algorithm, string path, List<JobObject> jobObjects, IRepository repository, DateTime dateTime)
+        public RestorePoint CreateBackup(IAlgorithm algorithm, string path, List<JobObject> jobObjects, IRepository repository, DateTime dateTime)
         {
             var restorePoint = new RestorePoint(algorithm, dateTime, path);
             repository.CreateStorageZip(jobObjects, algorithm, path, ZipId, BackupJob, dateTime, restorePoint);
             BackupJob.RestorePoints.Add(restorePoint);
+            return restorePoint;
         }
 
         public Backupjob GetBackupjob()

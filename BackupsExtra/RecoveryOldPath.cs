@@ -11,7 +11,8 @@ namespace BackupsExtra
             {
                 foreach (JobObject jobObject in storage.JobObjects)
                 {
-                    ZipFile.ExtractToDirectory(restorePoint.ZipPath, jobObject.File.Path);
+                    string changePath = $"{restorePoint.ZipPath}/{restorePoint.NameDirectory}";
+                    ZipFile.ExtractToDirectory(changePath, jobObject.File.Path);
                 }
             }
         }

@@ -9,7 +9,7 @@ namespace BackupsExtra
         public void Notify()
         {
             Console.WriteLine("Restore Point was created");
-            Console.WriteLine("BackupJob was Created");
+            Console.WriteLine("Storage was Created");
         }
     }
 }
