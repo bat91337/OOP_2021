@@ -5,6 +5,6 @@ namespace BackupsExtra
 {
     public interface ILogger
     {
-        public void Notify();
+         void Notify();
     }
 }

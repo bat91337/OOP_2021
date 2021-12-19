@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Backups;
+using BackupsExtra.Tools;
+
 namespace BackupsExtra
 {
     public class DeleteRestorePointByCount : IDeleteRestorePoint
@@ -11,7 +13,11 @@ namespace BackupsExtra
              backupJob.RestorePoints.OrderBy(x => x.Date).ToList();
              int count = backupJob.RestorePoints.Count - countRestorePoint;
 
-            // кинуть эксепшен, если удаляются все точки
+             if (backupJob.RestorePoints.Count.Equals(countRestorePoint))
+             {
+                 throw new BackupExtraException("you cannot delete all points");
+             }
+
              backupJob.RestorePoints.RemoveRange(0, count);
         }
     }
