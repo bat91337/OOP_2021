@@ -14,6 +14,7 @@ namespace Banks
 
         public void CreateClientConsole()
         {
+            var clientBuilder = new ClientBuilder();
             Console.WriteLine("enter customer name");
             string firstName = Console.ReadLine();
             Console.WriteLine("enter the client last name");
@@ -24,7 +25,13 @@ namespace Banks
             string address = Console.ReadLine();
             Console.WriteLine("enter phone number");
             string numberPhone = Console.ReadLine();
-            _bank.CreateClient();
+            clientBuilder
+                .SetName(lastName)
+                .SetFirstNAme(firstName)
+                .SetPassport(passport)
+                .SetAddress(address)
+                .SetNumberPhone(numberPhone);
+            _bank.CreateClient(clientBuilder.Build());
         }
 
         public void CreateCreditScoreConsole()

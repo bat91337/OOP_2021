@@ -79,10 +79,10 @@ namespace Banks
             Message.Add(str);
         }
 
-        public Client CreateClient()
+        public Client CreateClient(Client client)
         {
             var clientBuilder = new ClientBuilder();
-            Client client = clientBuilder.Build();
+            Client client1 = clientBuilder.Build();
             AddObserver(client);
             Client.Add(client);
             return client;
@@ -103,10 +103,8 @@ namespace Banks
                 {
                     throw new BanksException("incorrect data entered");
                 }
-                else
-                {
-                    client.Address = address;
-                }
+
+                client.Address = address;
             }
         }
 
@@ -118,24 +116,22 @@ namespace Banks
                 {
                     throw new BanksException("incorrect data entered");
                 }
-                else
-                {
-                    client.NumberPhone = numberPhone;
-                }
+
+                client.NumberPhone = numberPhone;
             }
         }
 
         public CreditScore CreateCreditScore(string id, decimal money)
         {
-            foreach (Account account1 in Accounts.Where(account1 => id.Equals(account1.Id)))
+            foreach (Account account in Accounts.Where(account => id.Equals(account.Id)))
             {
                 money += LimitCreditScore;
-                var creditScore = new CreditScore(money, PercentCreditScore, LimitCreditScore, account1.Client, DateTime.Now);
-                account1.Scores.Add(creditScore);
+                var creditScore = new CreditScore(money, PercentCreditScore, LimitCreditScore, account.Client, DateTime.Now);
+                account.Scores.Add(creditScore);
                 return creditScore;
             }
 
-            throw new BanksException("failed to create account");
+            throw new BanksException("failed to create credit score");
         }
 
         public DebitScore CreateDebitScore(string account, decimal money)
@@ -148,7 +144,7 @@ namespace Banks
                 return debitScore;
             }
 
-            throw new BanksException("failed to create account");
+            throw new BanksException("failed to create debit score");
         }
 
         public DepositScore CreateDepositScore(string account, decimal money)
@@ -170,7 +166,7 @@ namespace Banks
                 }
             }
 
-            throw new BanksException("failed to create account");
+            throw new BanksException("failed to create deposit score");
         }
 
         public void ChargePercent(int days)
@@ -226,6 +222,11 @@ namespace Banks
         {
             foreach (Transactions transaction in TransactionsList)
             {
+                if (string.IsNullOrWhiteSpace(transaction.NumberScoreNew))
+                {
+                    throw new BanksException("money cannot be returned");
+                }
+
                 if (transaction.Id.Equals(id))
                 {
                     BankAccount score = SearchScore(transaction.NumberScore);
@@ -234,6 +235,11 @@ namespace Banks
                     score1.ScoreMoney -= transaction.Sum;
                 }
             }
+        }
+
+        public void CancelNotify(IObserver observer)
+        {
+            Observers.Remove(observer);
         }
 
         public DateTime AddDays(int days)
