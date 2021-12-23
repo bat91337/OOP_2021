@@ -9,7 +9,7 @@ namespace Banks
 {
     public class Bank : IObservable, IObserver
     {
-        public Bank(decimal percentDebitScore, decimal percentCreditScore, string name, decimal limit)
+        public Bank(decimal percentDebitScore, decimal percentCreditScore, string name, decimal limit, decimal percentDepositScore)
         {
             Client = new List<Client>();
             Observers = new List<IObserver>();
@@ -23,13 +23,19 @@ namespace Banks
             CurrentDate = DateTime.Now;
             DictionaryDeposit = new Dictionary<decimal, decimal>();
             TransactionsList = new List<Transactions>();
+            PercentDepositScore = percentDepositScore;
         }
+
+        public delegate void MessageDelegate(string message);
+
+        public event MessageDelegate NotifyObserversDelegate;
 
         public List<Client> Client { get; }
         public List<IObserver> Observers { get; }
         public List<string> Message { get; }
-        public decimal PercentDebitScore { get; }
-        public decimal PercentCreditScore { get; }
+        public decimal PercentDebitScore { get; private set; }
+        public decimal PercentCreditScore { get; private set; }
+        public decimal PercentDepositScore { get; private set; }
         public decimal LimitCreditScore { get; }
         public string Name { get; }
         public string Id { get; }
@@ -37,23 +43,28 @@ namespace Banks
         public DateTime CurrentDate { get; private set; }
         public Dictionary<decimal, decimal> DictionaryDeposit { get; set; }
         public List<Transactions> TransactionsList { get; }
-
-        public void ChangePercentCreditScore(CreditScore score)
+        public void ChangePercentCreditScore(decimal newPercent)
         {
-            string message = "your percent has changed to" + score.Percent;
+            PercentCreditScore = newPercent;
+            string message = "your percent has changed to" + PercentDebitScore;
             NotifyObservers(message);
+            NotifyObserversDelegate?.Invoke(message);
         }
 
-        public void ChangePercentDebitScore(DebitScore score)
+        public void ChangePercentDebitScore(decimal newPercent)
         {
-            string message = "your percent has changed to" + score.Percent;
+            PercentDebitScore = newPercent;
+            string message = "your percent has changed to" + PercentDebitScore;
             NotifyObservers(message);
+            NotifyObserversDelegate?.Invoke(message);
         }
 
-        public void ChangePercentDepositScore(DepositScore score)
+        public void ChangePercentDepositScore(decimal newPercent)
         {
-            string message = "your percent has changed to" + score.Percent;
+            PercentDepositScore = newPercent;
+            string message = "your percent has changed to" + PercentDepositScore;
             NotifyObservers(message);
+            NotifyObserversDelegate?.Invoke(message);
         }
 
         public void AddObserver(IObserver iObserver)
@@ -81,8 +92,6 @@ namespace Banks
 
         public Client CreateClient(Client client)
         {
-            var clientBuilder = new ClientBuilder();
-            Client client1 = clientBuilder.Build();
             AddObserver(client);
             Client.Add(client);
             return client;
@@ -207,13 +216,13 @@ namespace Banks
             return null;
         }
 
-        public Transactions Transaction(string idBankAccount, string idAccount, decimal sum)
+        public Transactions Transaction(string idAccount1, string idAccount2, decimal sum)
         {
-            BankAccount score = SearchScore(idBankAccount);
-            BankAccount score1 = SearchScore(idAccount);
+            BankAccount score = SearchScore(idAccount1);
+            BankAccount score1 = SearchScore(idAccount2);
             score1.ScoreMoney += sum;
             score.ScoreMoney -= sum;
-            var transaction = new Transactions(idBankAccount, sum, idAccount);
+            var transaction = new Transactions(idAccount1, sum, idAccount2);
             TransactionsList.Add(transaction);
             return transaction;
         }

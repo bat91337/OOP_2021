@@ -42,9 +42,9 @@ namespace Banks
             }
         }
 
-        public Bank CreateBank(string name, decimal percentDebitScore, decimal percentCreditScore, decimal limit, decimal key, decimal value)
+        public Bank CreateBank(string name, decimal percentDebitScore, decimal percentCreditScore, decimal limit, decimal key, decimal value, decimal percentDepositScore)
         {
-            var bank = new Bank(percentDebitScore, percentCreditScore, name, limit);
+            var bank = new Bank(percentDebitScore, percentCreditScore, name, limit, percentDepositScore);
             bank.DictionaryDeposit.Add(key, value);
             _banks.Add(bank);
             AddObserver(bank);

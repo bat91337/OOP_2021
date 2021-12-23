@@ -30,8 +30,11 @@ namespace Banks.Scores
         public override void ChargePercent(int days)
         {
             decimal commission = Limit - ScoreMoney;
-            decimal commissionMonth = commission * Percent * days;
-            ScoreMoney -= commissionMonth;
+            if (commission > 0)
+            {
+                decimal commissionMonth = commission * Percent * days;
+                ScoreMoney -= commissionMonth;
+            }
         }
     }
 }
