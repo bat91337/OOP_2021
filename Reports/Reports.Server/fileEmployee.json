@@ -1,0 +1,91 @@
+{
+  "$type": "System.Collections.Generic.List`1[[Reports.DAL.Entities.Employee, Reports.DAL]], System.Private.CoreLib",
+  "$values": [
+    {
+      "$type": "Reports.DAL.Entities.Employee, Reports.DAL",
+      "Id": "edf347f0-2078-4d27-a013-7611475631ab",
+      "Name": "b",
+      "OpenTasks": {
+        "$type": "System.Collections.Generic.List`1[[System.Guid, System.Private.CoreLib]], System.Private.CoreLib",
+        "$values": []
+      },
+      "ActiveTasks": {
+        "$type": "System.Collections.Generic.List`1[[System.Guid, System.Private.CoreLib]], System.Private.CoreLib",
+        "$values": []
+      },
+      "ResolvedTasks": {
+        "$type": "System.Collections.Generic.List`1[[System.Guid, System.Private.CoreLib]], System.Private.CoreLib",
+        "$values": []
+      },
+      "Subordinates": {
+        "$type": "System.Collections.Generic.List`1[[System.Guid, System.Private.CoreLib]], System.Private.CoreLib",
+        "$values": [
+          "ee580bfd-7a6d-4d6e-aec3-f8f7b52b499d"
+        ]
+      }
+    },
+    {
+      "$type": "Reports.DAL.Entities.Employee, Reports.DAL",
+      "Id": "5c86cb42-f668-4994-b244-a2b7877225a4",
+      "Name": "n",
+      "OpenTasks": {
+        "$type": "System.Collections.Generic.List`1[[System.Guid, System.Private.CoreLib]], System.Private.CoreLib",
+        "$values": []
+      },
+      "ActiveTasks": {
+        "$type": "System.Collections.Generic.List`1[[System.Guid, System.Private.CoreLib]], System.Private.CoreLib",
+        "$values": []
+      },
+      "ResolvedTasks": {
+        "$type": "System.Collections.Generic.List`1[[System.Guid, System.Private.CoreLib]], System.Private.CoreLib",
+        "$values": []
+      },
+      "Subordinates": {
+        "$type": "System.Collections.Generic.List`1[[System.Guid, System.Private.CoreLib]], System.Private.CoreLib",
+        "$values": []
+      }
+    },
+    {
+      "$type": "Reports.DAL.Entities.Employee, Reports.DAL",
+      "Id": "baebcb5c-cbf9-4612-9c32-b879bbadc41c",
+      "Name": "j",
+      "OpenTasks": {
+        "$type": "System.Collections.Generic.List`1[[System.Guid, System.Private.CoreLib]], System.Private.CoreLib",
+        "$values": []
+      },
+      "ActiveTasks": {
+        "$type": "System.Collections.Generic.List`1[[System.Guid, System.Private.CoreLib]], System.Private.CoreLib",
+        "$values": []
+      },
+      "ResolvedTasks": {
+        "$type": "System.Collections.Generic.List`1[[System.Guid, System.Private.CoreLib]], System.Private.CoreLib",
+        "$values": []
+      },
+      "Subordinates": {
+        "$type": "System.Collections.Generic.List`1[[System.Guid, System.Private.CoreLib]], System.Private.CoreLib",
+        "$values": []
+      }
+    },
+    {
+      "$type": "Reports.DAL.Entities.Employee, Reports.DAL",
+      "Id": "e5ed779e-9a58-491a-a55e-564f84aee179",
+      "Name": "l",
+      "OpenTasks": {
+        "$type": "System.Collections.Generic.List`1[[System.Guid, System.Private.CoreLib]], System.Private.CoreLib",
+        "$values": []
+      },
+      "ActiveTasks": {
+        "$type": "System.Collections.Generic.List`1[[System.Guid, System.Private.CoreLib]], System.Private.CoreLib",
+        "$values": []
+      },
+      "ResolvedTasks": {
+        "$type": "System.Collections.Generic.List`1[[System.Guid, System.Private.CoreLib]], System.Private.CoreLib",
+        "$values": []
+      },
+      "Subordinates": {
+        "$type": "System.Collections.Generic.List`1[[System.Guid, System.Private.CoreLib]], System.Private.CoreLib",
+        "$values": []
+      }
+    }
+  ]
+}
