@@ -8,17 +8,16 @@ namespace BackupsExtra
 {
     public class DeleteRestorePointByCount : IDeleteRestorePoint
     {
-        public void DeleteRestorePoint(Backupjob backupJob, DateTime dateTime, int countRestorePoint)
+        public void DeleteRestorePoint(Backupjob backupJob, PredicateRestorePoint predicateRestorePoint)
         {
-             backupJob.RestorePoints.OrderBy(x => x.Date).ToList();
-             int count = backupJob.RestorePoints.Count - countRestorePoint;
+            int count = backupJob.RestorePoints.Count - predicateRestorePoint.Count;
 
-             if (backupJob.RestorePoints.Count.Equals(countRestorePoint))
-             {
-                 throw new BackupExtraException("you cannot delete all points");
-             }
+            if (backupJob.RestorePoints.Count.Equals(predicateRestorePoint.Count))
+            {
+                throw new BackupExtraException("you cannot delete all points");
+            }
 
-             backupJob.RestorePoints.RemoveRange(0, count);
+            backupJob.RestorePoints.RemoveRange(0, count);
         }
     }
 }

@@ -6,18 +6,18 @@ namespace BackupsExtra
 {
     public class DeleteRestorePointByCountAndTime : IDeleteRestorePoint
     {
-        public void DeleteRestorePoint(Backupjob backupJob, DateTime dateTime, int countRestorePoint)
+        public void DeleteRestorePoint(Backupjob backupJob, PredicateRestorePoint predicateRestorePoint)
         {
             backupJob.RestorePoints.OrderBy(x => x.Date).ToList();
-            if (DeleteByTime(backupJob, dateTime) && DeleteByCount(backupJob, countRestorePoint))
+            if (DeleteByTime(backupJob, predicateRestorePoint.DateTime) && DeleteByCount(backupJob, predicateRestorePoint.Count))
             {
-                int count = backupJob.RestorePoints.Count - countRestorePoint;
+                int count = backupJob.RestorePoints.Count - predicateRestorePoint.Count;
                 backupJob.RestorePoints.RemoveRange(0, count);
                 backupJob.RestorePoints.OrderBy(x => x.Date).ToList();
                 int countList = 0;
                 foreach (RestorePoint restorePoint in backupJob.RestorePoints)
                 {
-                    if (restorePoint.Date < dateTime)
+                    if (restorePoint.Date < predicateRestorePoint.DateTime)
                     {
                         countList++;
                     }

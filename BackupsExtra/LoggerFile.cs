@@ -7,10 +7,10 @@ namespace BackupsExtra
 {
     public class LoggerFile : ILogger
     {
-        public void Notify()
+        public void Notify(string path, RestorePoint restorePoint)
         {
-            var streamWriter = new StreamWriter("../../../text.txt");
-            streamWriter.WriteLine("Restore Point was created");
+            var streamWriter = new StreamWriter(path);
+            streamWriter.WriteLine($"Restore Point was created{restorePoint.Id}");
             streamWriter.WriteLine("BackupJob was Created");
         }
     }

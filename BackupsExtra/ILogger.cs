@@ -5,6 +5,6 @@ namespace BackupsExtra
 {
     public interface ILogger
     {
-         void Notify();
+         void Notify(string path, RestorePoint restorePoint);
     }
 }

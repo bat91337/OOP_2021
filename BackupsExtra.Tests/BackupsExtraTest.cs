@@ -41,7 +41,8 @@ namespace BackupsExtra.Tests
             IDeleteRestorePoint deleteRestorePoint = new DeleteRestorePointByCountOrTime();
             DateTime addDays1 = dateTime.AddDays(31);
              Backupjob backupJob = _backupManager.GetBackupjob();
-            _backupsExtraManager.Delete(deleteRestorePoint, backupJob, addDays1, 3);
+             var predicateRestorePoint = new PredicateRestorePoint(addDays1, 3);
+            _backupsExtraManager.Delete(deleteRestorePoint, backupJob, predicateRestorePoint);
             Assert.AreEqual(backupJob.RestorePoints.Count, 0);
         }
         

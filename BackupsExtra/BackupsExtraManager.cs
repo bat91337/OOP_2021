@@ -1,15 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.IO.Compression;
 using System.Linq;
-using System.Text.Json;
-using System.Threading.Tasks;
 using Backups;
-
-// using System.Text.Json;
 using Newtonsoft.Json;
-using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace BackupsExtra
 {
@@ -21,9 +15,9 @@ namespace BackupsExtra
             _backupManager = new BackupManager();
         }
 
-        public void Delete(IDeleteRestorePoint delete, Backupjob backupjob, DateTime dateTime, int countRestorePoint)
+        public void Delete(IDeleteRestorePoint delete, Backupjob backupjob, PredicateRestorePoint restorePoint)
         {
-            delete.DeleteRestorePoint(backupjob, dateTime, countRestorePoint);
+            delete.DeleteRestorePoint(backupjob, restorePoint);
         }
 
         public List<RestorePoint> SearchSingleAlgorithm(List<RestorePoint> restorePoints)
@@ -89,10 +83,10 @@ namespace BackupsExtra
             backupJob.RestorePoints.Add(restorePointNew);
         }
 
-        public void CreateBackupExtra(IAlgorithm algorithm, string path, List<JobObject> jobObjects, IRepository repository, DateTime dateTime, ILogger logger)
+        public void CreateBackupExtra(IAlgorithm algorithm, string path, List<JobObject> jobObjects, IRepository repository, DateTime dateTime, ILogger logger, string pathNotify)
         {
-            _backupManager.CreateBackup(algorithm, path, jobObjects, repository, dateTime);
-            logger.Notify();
+           RestorePoint restorePoint = _backupManager.CreateBackup(algorithm, path, jobObjects, repository, dateTime);
+           logger.Notify(pathNotify, restorePoint);
         }
 
         public void CreateRestorePointJson(RestorePoint restorePoint, string path)
