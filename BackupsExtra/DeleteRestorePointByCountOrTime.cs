@@ -9,7 +9,7 @@ namespace BackupsExtra
     {
         public void DeleteRestorePoint(Backupjob backupJob, PredicateRestorePoint predicateRestorePoint)
         {
-            if (DeleteByTime(backupJob, predicateRestorePoint.DateTime) ^ DeleteByCount(backupJob, predicateRestorePoint.Count))
+            if (DeleteByTime(backupJob, predicateRestorePoint.DateTime) || DeleteByCount(backupJob, predicateRestorePoint.Count))
             {
                 int count = backupJob.RestorePoints.Count - predicateRestorePoint.Count;
                 backupJob.RestorePoints.RemoveRange(0, count);
