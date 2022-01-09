@@ -34,55 +34,6 @@ namespace BackupsExtra
             return restorePoints1;
         }
 
-        public void DeleteRestorePoints(List<RestorePoint> restorePoints, Backupjob backupJob)
-        {
-            foreach (RestorePoint restorePoint in restorePoints)
-            {
-                backupJob.RestorePoints.Remove(restorePoint);
-            }
-        }
-
-        public void Merge(Backupjob backupJob)
-        {
-            var restorePoints = new List<RestorePoint>();
-            RestorePoint restorePointNew = backupJob.RestorePoints.Last();
-            backupJob.RestorePoints.Remove(restorePointNew);
-            if (restorePointNew.Algorithm is SingleAlgorithm)
-            {
-                foreach (RestorePoint restorePoint in backupJob.RestorePoints)
-                {
-                    restorePoints.Add(restorePoint);
-                }
-
-                DeleteRestorePoints(restorePoints, backupJob);
-            }
-            else
-            {
-                foreach (RestorePoint restorePoint in backupJob.RestorePoints)
-                {
-                    foreach (Storage storage in restorePoint.ListStorages)
-                    {
-                        foreach (Storage storageNew in restorePointNew.ListStorages)
-                        {
-                            if (storage.JobObjects.SequenceEqual(storageNew.JobObjects))
-                            {
-                                restorePoints.Add(restorePoint);
-                            }
-                            else
-                            {
-                                IEnumerable<JobObject> result = storage.JobObjects.Except(storageNew.JobObjects);
-                                storageNew.JobObjects.AddRange(result);
-                            }
-                        }
-                    }
-                }
-
-                DeleteRestorePoints(restorePoints, backupJob);
-            }
-
-            backupJob.RestorePoints.Add(restorePointNew);
-        }
-
         public void CreateBackupExtra(IAlgorithm algorithm, string path, List<JobObject> jobObjects, IRepository repository, DateTime dateTime, ILogger logger, string pathNotify)
         {
            RestorePoint restorePoint = _backupManager.CreateBackup(algorithm, path, jobObjects, repository, dateTime);

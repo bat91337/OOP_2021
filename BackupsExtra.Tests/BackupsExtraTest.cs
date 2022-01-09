@@ -38,10 +38,10 @@ namespace BackupsExtra.Tests
             _backupManager.CreateBackup(split, @"../../../BackupFiles/", jobObjects1, repository, addDays);
             _backupManager.CreateBackup(split, @"../../../BackupFiles/", jobObjects1, repository, addDays);
             _backupManager.CreateBackup(split, @"../../../BackupFiles/", jobObjects1, repository, addDays);
-            IDeleteRestorePoint deleteRestorePoint = new DeleteRestorePointByCountOrTime();
+            IDeleteRestorePoint deleteRestorePoint = new DeleteRestorePointHybrid();
             DateTime addDays1 = dateTime.AddDays(31);
              Backupjob backupJob = _backupManager.GetBackupjob();
-             var predicateRestorePoint = new PredicateRestorePoint(addDays1, 3);
+             var predicateRestorePoint = new PredicateRestorePoint(addDays1, 3, true);
             _backupsExtraManager.Delete(deleteRestorePoint, backupJob, predicateRestorePoint);
             Assert.AreEqual(backupJob.RestorePoints.Count, 0);
         }
@@ -61,8 +61,9 @@ namespace BackupsExtra.Tests
             _backupManager.CreateBackup(split, @"../../../BackupFiles/", jobObjects1, repository, dateTime);
             DateTime addDays = dateTime.AddDays(30);
             _backupManager.CreateBackup(single, @"../../../BackupFiles/", jobObjects1, repository, addDays);
+            var merge = new MergeBySingle();
             Backupjob backupJob = _backupManager.GetBackupjob();
-            _backupsExtraManager.Merge(backupJob);
+            merge.Merge(backupJob);
             Assert.AreEqual(backupJob.RestorePoints.Count, 1);
         }
         [Test]
@@ -81,7 +82,8 @@ namespace BackupsExtra.Tests
             dateTime.AddDays(30);
             _backupManager.CreateBackup(split, @"../../../BackupFiles/", jobObjects2, repository, dateTime);
             Backupjob backupJob = _backupManager.GetBackupjob();
-            _backupsExtraManager.Merge(backupJob);
+            var merge = new MergeByTime();
+            merge.Merge(backupJob);
             int storageCount = 0;
             foreach (RestorePoint restorePoint in backupJob.RestorePoints)
             {
