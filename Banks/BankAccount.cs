@@ -21,16 +21,10 @@ namespace Banks
         public Client Client { get; }
         public DateTime DateTime { get; }
 
-        public virtual void RaiseMoney(decimal money)
-        {
-        }
+        public abstract void RaiseMoney(decimal money);
 
-        public virtual void PutMoney(decimal money)
-        {
-        }
+        public abstract void PutMoney(decimal money);
 
-        public virtual void ChargePercent(int days)
-        {
-        }
+        public abstract void ChargePercent(int days);
     }
 }

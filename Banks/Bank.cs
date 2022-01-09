@@ -132,9 +132,11 @@ namespace Banks
 
         public CreditScore CreateCreditScore(string id, decimal money)
         {
-            foreach (Account account in Accounts.Where(account => id.Equals(account.Id)))
+            Account account = Accounts.FirstOrDefault(account => id.Equals(account.Id));
+
+            money += LimitCreditScore;
+            if (account != null)
             {
-                money += LimitCreditScore;
                 var creditScore = new CreditScore(money, PercentCreditScore, LimitCreditScore, account.Client, DateTime.Now);
                 account.Scores.Add(creditScore);
                 return creditScore;
@@ -145,9 +147,10 @@ namespace Banks
 
         public DebitScore CreateDebitScore(string account, decimal money)
         {
-            foreach (Account account1 in Accounts.Where(account1 => account.Equals(account1.Id)))
+            Account account1 = Accounts.FirstOrDefault(account1 => account1.Id.Equals(account));
+            const decimal limit = 0;
+            if (account1 != null)
             {
-                const decimal limit = 0;
                 var debitScore = new DebitScore(money, PercentDebitScore, limit, account1.Client, DateTime.Now);
                 account1.Scores.Add(debitScore);
                 return debitScore;
@@ -191,8 +194,6 @@ namespace Banks
             foreach (BankAccount score in Accounts.Where(account => account.Id.Equals(id)).SelectMany(account => account.Scores))
             {
                 score.RaiseMoney(money);
-                var transaction = new Transactions(id, money);
-                TransactionsList.Add(transaction);
             }
         }
 
@@ -201,16 +202,19 @@ namespace Banks
             Account account = Accounts.FirstOrDefault(account => account.Id.Equals(idAccount));
             BankAccount score = account.Scores.FirstOrDefault(score => score.NumberScore.Equals(idBankAccount));
             score.PutMoney(money);
-            var transaction = new Transactions(idAccount, money);
-            TransactionsList.Add(transaction);
         }
 
         public BankAccount SearchScore(string id)
         {
             foreach (Account account in Accounts)
             {
-                BankAccount score = account.Scores.FirstOrDefault(bankAccount => bankAccount.NumberScore.Equals(id));
-                return score;
+                foreach (var score in account.Scores)
+                {
+                    if (score.NumberScore.Equals(id))
+                    {
+                        return score;
+                    }
+                }
             }
 
             return null;
@@ -231,15 +235,10 @@ namespace Banks
         {
             foreach (Transactions transaction in TransactionsList)
             {
-                if (string.IsNullOrWhiteSpace(transaction.NumberScoreNew))
-                {
-                    throw new BanksException("money cannot be returned");
-                }
-
                 if (transaction.Id.Equals(id))
                 {
-                    BankAccount score = SearchScore(transaction.NumberScore);
-                    BankAccount score1 = SearchScore(transaction.NumberScoreNew);
+                    BankAccount score = SearchScore(transaction.NumberScoreSender);
+                    BankAccount score1 = SearchScore(transaction.NumberScoreBeneficiary);
                     score.ScoreMoney += transaction.Sum;
                     score1.ScoreMoney -= transaction.Sum;
                 }

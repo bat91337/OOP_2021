@@ -5,19 +5,14 @@ namespace Banks
     internal class Program
     {
         private static CentralBank _centralBank;
-        private Bank _bank;
+        private static Bank _bank;
         public Program(CentralBank centralBank, Bank bank)
         {
             _centralBank = centralBank;
             _bank = bank;
         }
 
-        public void CreateCentralBank(string bankName, decimal percentDebitScore, decimal percentCreditScore, decimal percentDepositScore)
-        {
-            _centralBank = CentralBank.GetInstance(bankName, percentDebitScore, percentCreditScore, percentDepositScore);
-        }
-
-        public void CreateClientConsole()
+        public static void CreateClientConsole()
         {
             var clientBuilder = new ClientBuilder();
             Console.WriteLine("enter customer name");
@@ -39,7 +34,7 @@ namespace Banks
             _bank.CreateClient(clientBuilder.Build());
         }
 
-        public void CreateCreditScoreConsole()
+        public static void CreateCreditScoreConsole()
         {
             Console.WriteLine("enter your account id");
             string account = Console.ReadLine();
@@ -48,7 +43,7 @@ namespace Banks
             _bank.CreateCreditScore(account, money);
         }
 
-        public void PutMoneyConsole()
+        public static void PutMoneyConsole()
         {
             Console.WriteLine("enter account number");
             string id = Console.ReadLine();
@@ -59,7 +54,7 @@ namespace Banks
             _bank.PutMoney(id, money, idBankAccount);
         }
 
-        public void RaiseMoneyConsole()
+        public static void RaiseMoneyConsole()
         {
             Console.WriteLine("enter account number");
             string id = Console.ReadLine();
@@ -70,7 +65,7 @@ namespace Banks
             _bank.RaiseMoney(id, money);
         }
 
-        public void TransactionConsole()
+        public static void TransactionConsole()
         {
             Console.WriteLine("enter account number");
             string account = Console.ReadLine();
@@ -83,7 +78,7 @@ namespace Banks
             _bank.Transaction(account, id, sum);
         }
 
-        public void CreateDebitScoreConsole()
+        public static void CreateDebitScoreConsole()
         {
             Console.WriteLine("enter your account id");
             string account = Console.ReadLine();
@@ -92,14 +87,14 @@ namespace Banks
             _bank.CreateDebitScore(account, money);
         }
 
-        public void CancelTransactionConsole()
+        public static void CancelTransactionConsole()
         {
             Console.WriteLine("enter the id of the transaction");
             string id = Console.ReadLine();
             _bank.CancelTransaction(id);
         }
 
-        public void CreateDepositScoreConsole()
+        public static void CreateDepositScoreConsole()
         {
             Console.WriteLine("enter your account id");
             string account = Console.ReadLine();
@@ -108,7 +103,7 @@ namespace Banks
             _bank.CreateDepositScore(account, money);
         }
 
-        public void AddNumberPhoneConsole()
+        public static void AddNumberPhoneConsole()
         {
             Console.WriteLine("enter passport details");
             string passport = Console.ReadLine();
@@ -117,7 +112,7 @@ namespace Banks
             _bank.AddNumberPhone(passport, numberPhone);
         }
 
-        public void AddAddressConsole()
+        public static void AddAddressConsole()
         {
             Console.WriteLine("enter passport details");
             string passport = Console.ReadLine();
@@ -126,8 +121,67 @@ namespace Banks
             _bank.AddAddress(passport, address);
         }
 
+        public void CreateCentralBank(string bankName, decimal percentDebitScore, decimal percentCreditScore, decimal percentDepositScore)
+        {
+            _centralBank = CentralBank.GetInstance(bankName, percentDebitScore, percentCreditScore, percentDepositScore);
+        }
+
         private static void Main()
         {
+            while (true)
+            {
+                Console.WriteLine("1 - register client");
+                Console.WriteLine("2 - create a credit account");
+                Console.WriteLine("3 - create a debit account");
+                Console.WriteLine("4 - create a deposit account");
+                Console.WriteLine("5 - withdraw money from the account");
+                Console.WriteLine("6 - put money into the account");
+                Console.WriteLine("7 - Transaction money to another account");
+                Console.WriteLine("8 - cancel Transaction");
+                Console.WriteLine("9 - add address");
+                Console.WriteLine("10 - Add number phone");
+                Console.WriteLine("11 - exit");
+                string str = Console.ReadLine();
+                int number = Convert.ToInt32(str);
+                switch (number)
+                {
+                    case 1:
+                        CreateClientConsole();
+                        continue;
+                    case 2:
+                        CreateCreditScoreConsole();
+                        continue;
+                    case 3:
+                        CreateDebitScoreConsole();
+                        continue;
+                    case 4:
+                        CreateDepositScoreConsole();
+                        continue;
+                    case 5:
+                        RaiseMoneyConsole();
+                        continue;
+                    case 6:
+                        PutMoneyConsole();
+                        continue;
+                    case 7:
+                        TransactionConsole();
+                        continue;
+                    case 8:
+                        CancelTransactionConsole();
+                        continue;
+                    case 9:
+                        AddAddressConsole();
+                        continue;
+                    case 10:
+                        AddNumberPhoneConsole();
+                        continue;
+                    case 11:
+                        return;
+                    default:
+                        Console.WriteLine("wrong number entered");
+                        continue;
+                }
+            }
         }
     }
 }
