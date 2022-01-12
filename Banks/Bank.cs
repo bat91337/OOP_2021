@@ -193,6 +193,8 @@ namespace Banks
         {
             foreach (BankAccount score in Accounts.Where(account => account.Id.Equals(id)).SelectMany(account => account.Scores))
             {
+                var transaction = new Transactions(id, money);
+                TransactionsList.Add(transaction);
                 score.RaiseMoney(money);
             }
         }
@@ -201,6 +203,8 @@ namespace Banks
         {
             Account account = Accounts.FirstOrDefault(account => account.Id.Equals(idAccount));
             BankAccount score = account.Scores.FirstOrDefault(score => score.NumberScore.Equals(idBankAccount));
+            var transaction = new Transactions(idBankAccount, money);
+            TransactionsList.Add(transaction);
             score.PutMoney(money);
         }
 
@@ -220,13 +224,13 @@ namespace Banks
             return null;
         }
 
-        public Transactions Transaction(string idAccount1, string idAccount2, decimal sum)
+        public Transactions Transaction(string numberScoreSender, string numberScoreBeneficiary, decimal sum)
         {
-            BankAccount score = SearchScore(idAccount1);
-            BankAccount score1 = SearchScore(idAccount2);
+            BankAccount score = SearchScore(numberScoreSender);
+            BankAccount score1 = SearchScore(numberScoreBeneficiary);
             score1.ScoreMoney += sum;
             score.ScoreMoney -= sum;
-            var transaction = new Transactions(idAccount1, sum, idAccount2);
+            var transaction = new Transactions(numberScoreSender, sum, numberScoreBeneficiary);
             TransactionsList.Add(transaction);
             return transaction;
         }
@@ -235,12 +239,24 @@ namespace Banks
         {
             foreach (Transactions transaction in TransactionsList)
             {
+                if (string.IsNullOrWhiteSpace(transaction.NumberScoreBeneficiary))
+                {
+                    throw new BanksException("number score beneficiary is empty");
+                }
+
                 if (transaction.Id.Equals(id))
                 {
                     BankAccount score = SearchScore(transaction.NumberScoreSender);
                     BankAccount score1 = SearchScore(transaction.NumberScoreBeneficiary);
-                    score.ScoreMoney += transaction.Sum;
-                    score1.ScoreMoney -= transaction.Sum;
+                    if (score != null && score1 != null)
+                    {
+                        score.ScoreMoney += transaction.Sum;
+                        score1.ScoreMoney -= transaction.Sum;
+                    }
+                    else
+                    {
+                        throw new BanksException("number score is empty");
+                    }
                 }
             }
         }

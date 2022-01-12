@@ -4,7 +4,7 @@ namespace Banks
 {
     public class Transactions
     {
-        public Transactions(string numberScoreSender, decimal sum, string numberScoreBeneficiary)
+        public Transactions(string numberScoreSender, decimal sum, string numberScoreBeneficiary = "")
         {
             Id = Guid.NewGuid().ToString();
             NumberScoreSender = numberScoreSender;
