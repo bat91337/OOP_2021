@@ -10,7 +10,7 @@ namespace Backups
         public void CreateStorageZip(List<JobObject> jobObjects, IAlgorithm algorithm, string path, string id, Backupjob backupJob, DateTime dateTime, RestorePoint restorePoint)
         {
             string changedPath = path;
-
+            
             List<Storage> storages = restorePoint.Algorithm.CreateStorages(jobObjects);
             string newPath = $"{path}/{restorePoint.NameDirectory}";
             var directory = new DirectoryInfo(newPath);

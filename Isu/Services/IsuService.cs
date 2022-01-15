@@ -117,5 +117,10 @@ namespace Isu.Services
             newGroup.Students.Add(student);
             previousGroup.Students.Remove(student);
         }
+
+        public List<Group> GetListGroup()
+        {
+            return _groupList;
+        }
     }
 }

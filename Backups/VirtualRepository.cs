@@ -6,7 +6,7 @@ namespace Backups
 {
     public class VirtualRepository : IRepository
     {
-        public VirtualRepository()
+        public void CreateStorageZip(List<JobObject> jobObjects, IAlgorithm algorithm, string path, string id, Backupjob backupJob, DateTime dateTime, RestorePoint restorePoint)
         {
             Storages = new List<Storage>();
         }

@@ -1,0 +1,46 @@
+{
+  "$type": "System.Collections.Generic.List`1[[Reports.DAL.Entities.Task, Reports.DAL]], System.Private.CoreLib",
+  "$values": [
+    {
+      "$type": "Reports.DAL.Entities.Task, Reports.DAL",
+      "Name": "few",
+      "Id": "b6752223-b98b-4e59-b3dc-b17f8ed4da71",
+      "StatusTask": 0,
+      "DateTime": "2021-12-29T23:21:10.532433+05:00",
+      "Description": "dwafa",
+      "Comments": {
+        "$type": "System.Collections.Generic.List`1[[System.String, System.Private.CoreLib]], System.Private.CoreLib",
+        "$values": []
+      },
+      "Employee": "edf347f0-2078-4d27-a013-7611475631ab"
+    },
+    {
+      "$type": "Reports.DAL.Entities.Task, Reports.DAL",
+      "Name": "da",
+      "Id": "3deee1a1-da3b-4fb0-99c2-50890efb1772",
+      "StatusTask": 1,
+      "DateTime": "2021-12-29T23:21:01.62478+05:00",
+      "Description": "dwafa",
+      "Comments": {
+        "$type": "System.Collections.Generic.List`1[[System.String, System.Private.CoreLib]], System.Private.CoreLib",
+        "$values": [
+          "great"
+        ]
+      },
+      "Employee": "e5ed779e-9a58-491a-a55e-564f84aee179"
+    },
+    {
+      "$type": "Reports.DAL.Entities.Task, Reports.DAL",
+      "Name": "ffewfew",
+      "Id": "854fd0a9-aa58-4f42-90f1-b758d6b48969",
+      "StatusTask": 0,
+      "DateTime": "2021-12-29T23:32:27.143707+05:00",
+      "Description": "fewgew",
+      "Comments": {
+        "$type": "System.Collections.Generic.List`1[[System.String, System.Private.CoreLib]], System.Private.CoreLib",
+        "$values": []
+      },
+      "Employee": "edf347f0-2078-4d27-a013-7611475631ab"
+    }
+  ]
+}

@@ -16,14 +16,12 @@ namespace Backups
 
         public List<JobObject> AddJobObject(string path, string name)
         {
-            var jobObject = new JobObject(path, name);
-            BackupJob.JobObjects.Add(jobObject);
-            return BackupJob.JobObjects;
+            return BackupJob.AddJobObject(path, name);
         }
 
         public void RemoveJobObject(JobObject jobObject)
         {
-            BackupJob.JobObjects.Remove(jobObject);
+             BackupJob.RemoveJobObject(jobObject);
         }
 
         public RestorePoint CreateBackup(IAlgorithm algorithm, string path, List<JobObject> jobObjects, IRepository repository, DateTime dateTime)

@@ -36,17 +36,18 @@ namespace Backups.Tests
             Assert.AreEqual(storagesCount, 3);
             Assert.AreEqual(_backupManager.GetBackupjob().RestorePoints.Count, 2);
         }
-    [Test]
-    public void CreateSplitStorages1()
-    {
-        var repository = new LocalRepository();
-        var jobObject = new JobObject(@"../../../Files/FileA", "FileA");
-        List<JobObject> jobObjects = _backupManager.AddJobObject(@"../../../Files/FileB", "FileA");
-        jobObjects.Add(jobObject);
-        IAlgorithm single = new SingleAlgorithm();
-        DateTime dateTime = DateTime.Now;
-        _backupManager.CreateBackup(single, @"../../../BackupFiles/Single", jobObjects, repository, dateTime);
-        Assert.AreEqual(_backupManager.GetBackupjob().RestorePoints.Count, 1);
+      
+        [Test]
+        public void CreateSingleStorages()
+        {
+            var repository = new LocalRepository();
+            var jobObject = new JobObject(@"../../../Files/FileA", "FileA");
+            List<JobObject> jobObjects = _backupManager.AddJobObject(@"../../../Files/FileB", "FileA");
+            jobObjects.Add(jobObject);
+            IAlgorithm single = new SingleAlgorithm();
+            DateTime dateTime = DateTime.Now;
+            _backupManager.CreateBackup(single, @"../../../BackupFiles/Single", jobObjects, repository, dateTime);
+            Assert.AreEqual(_backupManager.GetBackupjob().RestorePoints.Count, 1);
+        }
     }
-     }
 }

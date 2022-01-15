@@ -1,0 +1,44 @@
+{
+  "$type": "System.Collections.Generic.List`1[[Reports.DAL.Entities.Report, Reports.DAL]], System.Private.CoreLib",
+  "$values": [
+    {
+      "$type": "Reports.DAL.Entities.Report, Reports.DAL",
+      "Id": "2e585a7e-ad50-4f6c-84fa-032b8f0ee4af",
+      "Name": "gregrege",
+      "Employee": {
+        "$type": "Reports.DAL.Entities.Employee, Reports.DAL",
+        "Id": "edf347f0-2078-4d27-a013-7611475631ab",
+        "Name": "b",
+        "OpenTasks": {
+          "$type": "System.Collections.Generic.List`1[[System.Guid, System.Private.CoreLib]], System.Private.CoreLib",
+          "$values": []
+        },
+        "ActiveTasks": {
+          "$type": "System.Collections.Generic.List`1[[System.Guid, System.Private.CoreLib]], System.Private.CoreLib",
+          "$values": []
+        },
+        "ResolvedTasks": {
+          "$type": "System.Collections.Generic.List`1[[System.Guid, System.Private.CoreLib]], System.Private.CoreLib",
+          "$values": []
+        },
+        "Subordinates": {
+          "$type": "System.Collections.Generic.List`1[[System.Guid, System.Private.CoreLib]], System.Private.CoreLib",
+          "$values": [
+            "ee580bfd-7a6d-4d6e-aec3-f8f7b52b499d"
+          ]
+        }
+      },
+      "Tasks": {
+        "$type": "System.Collections.Generic.List`1[[System.Guid, System.Private.CoreLib]], System.Private.CoreLib",
+        "$values": []
+      },
+      "TasksList": {
+        "$type": "System.Collections.Generic.List`1[[Reports.DAL.Entities.Task, Reports.DAL]], System.Private.CoreLib",
+        "$values": []
+      },
+      "DateTime": "2021-12-30T22:42:10.685281+05:00",
+      "StatusReport": 1,
+      "Description": "jhgbrhjgrt"
+    }
+  ]
+}

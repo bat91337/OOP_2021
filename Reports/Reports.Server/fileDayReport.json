@@ -1,0 +1,42 @@
+{
+  "$type": "System.Collections.Generic.List`1[[Reports.DAL.Entities.Report, Reports.DAL]], System.Private.CoreLib",
+  "$values": [
+    {
+      "$type": "Reports.DAL.Entities.Report, Reports.DAL",
+      "Id": "6c92f8b8-86d1-4aab-beed-3bf0c2782996",
+      "Name": "vverer",
+      "Employee": {
+        "$type": "Reports.DAL.Entities.Employee, Reports.DAL",
+        "Id": "5c86cb42-f668-4994-b244-a2b7877225a4",
+        "Name": "n",
+        "OpenTasks": {
+          "$type": "System.Collections.Generic.List`1[[System.Guid, System.Private.CoreLib]], System.Private.CoreLib",
+          "$values": []
+        },
+        "ActiveTasks": {
+          "$type": "System.Collections.Generic.List`1[[System.Guid, System.Private.CoreLib]], System.Private.CoreLib",
+          "$values": []
+        },
+        "ResolvedTasks": {
+          "$type": "System.Collections.Generic.List`1[[System.Guid, System.Private.CoreLib]], System.Private.CoreLib",
+          "$values": []
+        },
+        "Subordinates": {
+          "$type": "System.Collections.Generic.List`1[[System.Guid, System.Private.CoreLib]], System.Private.CoreLib",
+          "$values": []
+        }
+      },
+      "Tasks": {
+        "$type": "System.Collections.Generic.List`1[[System.Guid, System.Private.CoreLib]], System.Private.CoreLib",
+        "$values": []
+      },
+      "TasksList": {
+        "$type": "System.Collections.Generic.List`1[[Reports.DAL.Entities.Task, Reports.DAL]], System.Private.CoreLib",
+        "$values": []
+      },
+      "DateTime": "2021-12-30T22:30:50.564672+05:00",
+      "StatusReport": 0,
+      "Description": "fefwfw"
+    }
+  ]
+}
