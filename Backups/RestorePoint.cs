@@ -15,11 +15,15 @@ namespace Backups
             NameDirectory = $"/RestorePoint{Id}/";
         }
 
-        public DateTime Date { get; }
-        public List<Storage> ListStorages { get; }
-        public IAlgorithm Algorithm { get; }
-        public string ZipPath { get; }
-        public Guid Id { get; }
-        public string NameDirectory { get; }
+        public RestorePoint()
+        {
+        }
+
+        public DateTime Date { get; set; }
+        public List<Storage> ListStorages { get; set; }
+        public IAlgorithm Algorithm { get; set; }
+        public string ZipPath { get; set; }
+        public string NameDirectory { get; set; }
+        public Guid Id { get; set; }
     }
 }

@@ -5,14 +5,14 @@ namespace Backups
 {
     public class BackupManager
     {
-        private static string _zipId;
         public BackupManager()
         {
             BackupJob = new Backupjob();
-            _zipId = Guid.NewGuid().ToString();
+            ZipId = Guid.NewGuid().ToString();
         }
 
-        private Backupjob BackupJob { get; }
+        public Backupjob BackupJob { get; }
+        protected string ZipId { get; }
 
         public List<JobObject> AddJobObject(string path, string name)
         {
@@ -24,14 +24,15 @@ namespace Backups
              BackupJob.RemoveJobObject(jobObject);
         }
 
-        public void CreateBackup(IAlgorithm algorithm, string path, List<JobObject> jobObjects, IRepository repository, DateTime dateTime)
+        public RestorePoint CreateBackup(IAlgorithm algorithm, string path, List<JobObject> jobObjects, IRepository repository, DateTime dateTime)
         {
             var restorePoint = new RestorePoint(algorithm, dateTime, path);
-            repository.CreateStorageZip(jobObjects, algorithm, path, _zipId, BackupJob, dateTime, restorePoint);
+            repository.CreateStorageZip(jobObjects, algorithm, path, ZipId, BackupJob, dateTime, restorePoint);
             BackupJob.RestorePoints.Add(restorePoint);
+            return restorePoint;
         }
 
-        public Backupjob GetBackupJob()
+        public Backupjob GetBackupjob()
         {
             return BackupJob;
         }

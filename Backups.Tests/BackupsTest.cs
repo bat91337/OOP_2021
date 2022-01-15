@@ -17,8 +17,7 @@ namespace Backups.Tests
         [Test]
         public void CreateSplitStorages()
         {
-            var repository = new VirtualRepository();
-           
+            var repository = new LocalRepository();
             var jobObject = new JobObject(@"../../../Files/FileB", "FileB");
             List<JobObject> jobObjects1 = _backupManager.AddJobObject(@"../../../Files/FileA", "FileA");
             jobObjects1.Add(jobObject);
@@ -28,26 +27,27 @@ namespace Backups.Tests
             _backupManager.RemoveJobObject(jobObject);
             jobObjects1.Remove(jobObject);
             _backupManager.CreateBackup(split, @"../../../BackupFiles/", jobObjects1, repository, dateTime);
-            Backupjob backupjob = _backupManager.GetBackupJob();
-            int storageCount = 0;
-            foreach (RestorePoint restorePoint in backupjob.RestorePoints)
+            Backupjob backupjob = _backupManager.GetBackupjob();
+            int storagesCount = 0;
+            foreach (var restorePoints in backupjob.RestorePoints)
             {
-                storageCount += restorePoint.ListStorages.Count;
+                storagesCount += restorePoints.ListStorages.Count;
             }
-            Assert.AreEqual(storageCount, 3);
-            Assert.AreEqual(_backupManager.GetBackupJob().RestorePoints.Count, 2);
+            Assert.AreEqual(storagesCount, 3);
+            Assert.AreEqual(_backupManager.GetBackupjob().RestorePoints.Count, 2);
         }
-    [Test]
-    public void CreateSingleStorages()
-    {
-        var repository = new VirtualRepository();
-        var jobObject = new JobObject(@"../../../Files/FileA", "FileA");
-        List<JobObject> jobObjects = _backupManager.AddJobObject(@"../../../Files/FileB", "FileA");
-        jobObjects.Add(jobObject);
-        IAlgorithm single = new SingleAlgorithm();
-        DateTime dateTime = DateTime.Now;
-        _backupManager.CreateBackup(single, @"../../../BackupFiles/Single", jobObjects, repository, dateTime);
-        Assert.AreEqual(_backupManager.GetBackupJob().RestorePoints.Count, 1);
+      
+        [Test]
+        public void CreateSingleStorages()
+        {
+            var repository = new LocalRepository();
+            var jobObject = new JobObject(@"../../../Files/FileA", "FileA");
+            List<JobObject> jobObjects = _backupManager.AddJobObject(@"../../../Files/FileB", "FileA");
+            jobObjects.Add(jobObject);
+            IAlgorithm single = new SingleAlgorithm();
+            DateTime dateTime = DateTime.Now;
+            _backupManager.CreateBackup(single, @"../../../BackupFiles/Single", jobObjects, repository, dateTime);
+            Assert.AreEqual(_backupManager.GetBackupjob().RestorePoints.Count, 1);
+        }
     }
-     }
 }

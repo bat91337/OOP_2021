@@ -7,12 +7,6 @@ namespace Backups
 {
     public class LocalRepository : IRepository
     {
-        public LocalRepository()
-        {
-            Storages = new List<Storage>();
-        }
-
-        public List<Storage> Storages { get; }
         public void CreateStorageZip(List<JobObject> jobObjects, IAlgorithm algorithm, string path, string id, Backupjob backupJob, DateTime dateTime, RestorePoint restorePoint)
         {
             string changedPath = path;
